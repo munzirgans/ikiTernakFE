@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ikiternak_apps
 
 A new Flutter project.
@@ -14,3 +15,6 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+=======
+# ikiTernakFE
+>>>>>>> 4721bd813d9810886e8e54bfe62e650d48e82da2
