@@ -1,40 +1,38 @@
 import 'dart:convert';
-// import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ikiternak_apps/Screen/Login/login_screen.dart';
 import 'package:http/http.dart' as http;
-import 'package:ikiternak_apps/Screen/register/regist_page2.dart';
 
-class RegistScreen extends StatefulWidget {
-  const RegistScreen({super.key});
+class RegistScreen2 extends StatefulWidget {
+  const RegistScreen2({Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _RegistScreenState createState() => _RegistScreenState();
 }
 
-class _RegistScreenState extends State<RegistScreen> {
+class _RegistScreenState extends State<RegistScreen2> {
   final TextEditingController _fullnameController = TextEditingController();
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  // ignore: non_constant_identifier_names
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _birthdateController = TextEditingController();
+  String? _selectedGender = 'Select'; // Set initial value to 'Select'
+  final TextEditingController _addressController = TextEditingController();
 
   Future<void> registerUser() async {
     const String apiURL = "http://192.168.18.23:3000/auth/register";
     final Map<String, dynamic> userData = {
-      'name': _fullnameController.text,
-      'email': _emailController.text,
-      'username': _usernameController.text,
-      'password': _passwordController.text
+      'Fullname': _fullnameController.text,
+      'email': _birthdateController.text,
+      'username': _selectedGender == 'Select' ? '' : _selectedGender,
+      'password': _addressController.text,
     };
 
     try {
-      final response = await http.post(Uri.parse(apiURL),
-          headers: {'Content-Type': 'application/json'},
-          body: jsonEncode(userData));
+      final response = await http.post(
+        Uri.parse(apiURL),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(userData),
+      );
+
       if (response.statusCode == 200) {
         print("Berhasil registrasi!");
       } else {
@@ -44,9 +42,7 @@ class _RegistScreenState extends State<RegistScreen> {
       print('Error: $error');
     }
   }
-  // void initState(){
 
-  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,18 +106,20 @@ class _RegistScreenState extends State<RegistScreen> {
         children: <Widget>[
           _buildWelcomeText(),
           _buildLoginText(),
-          _buildInputField('Full name', _fullnameController, 'Your Full Name'),
-          _buildInputField('Username', _usernameController, 'Your Username'),
           _buildInputField(
-              'Email', _emailController, 'Your Email. Ex : abcde@lalala.com'),
-          _buildInputField('Password', _passwordController, 'Your Password'),
+              'Full name', _fullnameController, 'Your Full Name', false),
+          _buildInputField(
+              'Birthdate', _birthdateController, 'MM/DD/YYYY', true),
+          _buildGenderDropdown('Gender'),
+          _buildInputField(
+              'Address', _addressController, 'Your Address', false),
           const SizedBox(height: 15),
           ElevatedButton(
             onPressed: () {
               registerUser();
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const RegistScreen2()),
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
               );
             },
             style: ElevatedButton.styleFrom(
@@ -132,7 +130,7 @@ class _RegistScreenState extends State<RegistScreen> {
               minimumSize: const Size(double.infinity, 40),
             ),
             child: Text(
-              'Next',
+              'Sign Up',
               style: GoogleFonts.poppins(
                 color: Colors.white,
                 fontSize: 16,
@@ -159,7 +157,7 @@ class _RegistScreenState extends State<RegistScreen> {
               fontWeight: FontWeight.w400,
             ),
             children: const <TextSpan>[
-              TextSpan(text: 'Already Have an Account? '),
+              TextSpan(text: 'Already Have a Account? '),
               TextSpan(
                 text: 'Sign In Here',
                 style: TextStyle(
@@ -193,7 +191,7 @@ class _RegistScreenState extends State<RegistScreen> {
     return Padding(
       padding: const EdgeInsets.only(top: 0.0),
       child: Text(
-        "Please Create Your Account First!",
+        "Buat akun Anda sekarang!",
         style: GoogleFonts.poppins(
           color: const Color(0xFF5B5B5B),
           fontSize: 10,
@@ -204,8 +202,8 @@ class _RegistScreenState extends State<RegistScreen> {
     );
   }
 
-  Widget _buildInputField(
-      String labelText, TextEditingController controller, String hintText) {
+  Widget _buildInputField(String labelText, TextEditingController controller,
+      String hintText, bool isBirthdateInput) {
     return Padding(
       padding: const EdgeInsets.only(top: 10.0),
       child: Column(
@@ -219,26 +217,82 @@ class _RegistScreenState extends State<RegistScreen> {
               fontWeight: FontWeight.w400,
             ),
           ),
-          TextFormField(
-            controller: controller,
-            obscureText:
-                labelText == 'Password' || labelText == 'Confirm Password',
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.all(10),
-              hintText: hintText,
-              hintStyle: GoogleFonts.poppins(
-                color: const Color(0xFF999999),
-                fontSize: 10,
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            decoration: BoxDecoration(
+              border: Border.all(color: const Color(0xFF50BE92), width: 1.0),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: TextFormField(
+              controller: controller,
+              obscureText:
+                  labelText == 'Password' || labelText == 'Confirm Password',
+              readOnly: isBirthdateInput,
+              decoration: InputDecoration(
+                hintText: hintText,
+                hintStyle: GoogleFonts.poppins(
+                  color: const Color(0xFF999999),
+                  fontSize: 10,
+                ),
+                border: InputBorder.none,
               ),
-              focusedBorder: OutlineInputBorder(
-                borderSide:
-                    const BorderSide(color: Color(0xFF50BE92), width: 1.0),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide:
-                    const BorderSide(color: Color(0xFF50BE92), width: 1.0),
-                borderRadius: BorderRadius.circular(10),
+              onTap: () {
+                if (isBirthdateInput) {
+                  _selectDate(context, controller);
+                }
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildGenderDropdown(String labelText) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            labelText,
+            style: GoogleFonts.poppins(
+              color: Colors.black,
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          Container(
+            width: double.infinity,
+            height: 50,
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            decoration: BoxDecoration(
+              border: Border.all(color: const Color(0xFF50BE92), width: 1.0),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                value: _selectedGender,
+                items: <String>['Select', 'Laki-laki', 'Perempuan']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(
+                      value,
+                      style: GoogleFonts.poppins(
+                        color: value == 'Select'
+                            ? const Color(0xFF999999)
+                            : Colors.black,
+                        fontSize: 10,
+                      ),
+                    ),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedGender = newValue == 'Select' ? null : newValue;
+                  });
+                },
               ),
             ),
           ),
@@ -246,4 +300,26 @@ class _RegistScreenState extends State<RegistScreen> {
       ),
     );
   }
+
+  Future<void> _selectDate(
+      BuildContext context, TextEditingController controller) async {
+    DateTime currentDate = DateTime.now();
+    DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: currentDate,
+      firstDate: DateTime(1900),
+      lastDate: currentDate,
+    );
+
+    if (picked != null && picked != currentDate) {
+      String formattedDate = "${picked.month}/${picked.day}/${picked.year}";
+      controller.text = formattedDate;
+    }
+  }
+}
+
+void main() {
+  runApp(const MaterialApp(
+    home: RegistScreen2(),
+  ));
 }
