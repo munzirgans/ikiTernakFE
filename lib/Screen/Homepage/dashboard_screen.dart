@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ikiternak_apps/Screen/TernakDiary/diaryTernak.dart';
+import 'package:fl_chart/fl_chart.dart';
+
 //import 'buttomNavigationBar.dart';
 
 void main() {
@@ -550,423 +552,53 @@ class _DashboardState extends State<Dashboard> {
         SizedBox(
           width: 339,
           height: 192,
-          child: Stack(
-            children: [
-              Positioned(
-                left: 0,
-                top: 0,
-                child: Container(
-                  width: 339,
-                  height: 192,
-                  decoration: ShapeDecoration(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      side:
-                          const BorderSide(width: 1, color: Color(0xFFEBEBEB)),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+          child: LineChart(
+            LineChartData(
+              gridData: FlGridData(show: false),
+              titlesData: FlTitlesData(show: false),
+              borderData: FlBorderData(
+                show: true,
+                border: Border(
+                  bottom: BorderSide(
+                    color: Color(0xFFD8DCDA),
+                    width: 1,
+                  ),
+                  left: BorderSide(
+                    color: Color(0xFFD8DCDA),
+                    width: 1,
+                  ),
+                  right: BorderSide(
+                    color: Color(0xFFD8DCDA),
+                    width: 1,
+                  ),
+                  top: BorderSide(
+                    color: Color(0xFFD8DCDA),
+                    width: 1,
                   ),
                 ),
               ),
-              const Positioned(
-                left: 9,
-                top: 12,
-                child: Text(
-                  'Egg Production',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 10,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w500,
-                    height: 0,
-                  ),
+              minX: 0,
+              maxX: 6,
+              minY: 0,
+              maxY: 100,
+              lineBarsData: [
+                LineChartBarData(
+                  spots: [
+                    FlSpot(1, 20),
+                    FlSpot(2, 40),
+                    FlSpot(3, 60),
+                    FlSpot(4, 80),
+                    FlSpot(5, 40),
+                    FlSpot(6, 60),
+                  ],
+                  isCurved: true,
+                  color: Color(0xFF50BE92),
+                  barWidth: 2,
+                  isStrokeCapRound: true,
+                  belowBarData: BarAreaData(show: false),
                 ),
-              ),
-              const Positioned(
-                left: 21,
-                top: 152,
-                child: Text(
-                  '0',
-                  style: TextStyle(
-                    color: Color(0xFF424745),
-                    fontSize: 10,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w500,
-                    height: 0,
-                  ),
-                ),
-              ),
-              const Positioned(
-                left: 18,
-                top: 127,
-                child: Text(
-                  '25',
-                  style: TextStyle(
-                    color: Color(0xFF424745),
-                    fontSize: 10,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w500,
-                    height: 0,
-                  ),
-                ),
-              ),
-              const Positioned(
-                left: 18,
-                top: 102,
-                child: Text(
-                  '50',
-                  style: TextStyle(
-                    color: Color(0xFF424745),
-                    fontSize: 10,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w500,
-                    height: 0,
-                  ),
-                ),
-              ),
-              const Positioned(
-                left: 18,
-                top: 77,
-                child: Text(
-                  '75',
-                  style: TextStyle(
-                    color: Color(0xFF424745),
-                    fontSize: 10,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w500,
-                    height: 0,
-                  ),
-                ),
-              ),
-              const Positioned(
-                left: 16,
-                top: 52,
-                child: Text(
-                  '100',
-                  style: TextStyle(
-                    color: Color(0xFF424745),
-                    fontSize: 10,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w500,
-                    height: 0,
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 40,
-                top: 60,
-                child: Container(
-                  width: 275,
-                  decoration: const ShapeDecoration(
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                        width: 1,
-                        strokeAlign: BorderSide.strokeAlignCenter,
-                        color: Color(0xFFD8DCDA),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 40,
-                top: 85,
-                child: Container(
-                  width: 275,
-                  decoration: const ShapeDecoration(
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                        width: 1,
-                        strokeAlign: BorderSide.strokeAlignCenter,
-                        color: Color(0xFFD8DCDA),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 40,
-                top: 110,
-                child: Container(
-                  width: 275,
-                  decoration: const ShapeDecoration(
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                        width: 1,
-                        strokeAlign: BorderSide.strokeAlignCenter,
-                        color: Color(0xFFD8DCDA),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 40,
-                top: 135,
-                child: Container(
-                  width: 275,
-                  decoration: const ShapeDecoration(
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                        width: 1,
-                        strokeAlign: BorderSide.strokeAlignCenter,
-                        color: Color(0xFFD8DCDA),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 40,
-                top: 160,
-                child: Container(
-                  width: 275,
-                  decoration: const ShapeDecoration(
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                        width: 1,
-                        strokeAlign: BorderSide.strokeAlignCenter,
-                        color: Color(0xFFD8DCDA),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              const Positioned(
-                left: 270,
-                top: 14,
-                child: Text(
-                  'Last 7 days',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Color(0xFF575757),
-                    fontSize: 8,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                    height: 0,
-                  ),
-                ),
-              ),
-              const Positioned(
-                left: 57,
-                top: 167,
-                child: Text(
-                  'Day 1',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Color(0xFF575757),
-                    fontSize: 8,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                    height: 0,
-                  ),
-                ),
-              ),
-              const Positioned(
-                left: 112,
-                top: 167,
-                child: Text(
-                  'Day 2',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Color(0xFF575757),
-                    fontSize: 8,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                    height: 0,
-                  ),
-                ),
-              ),
-              const Positioned(
-                left: 168,
-                top: 167,
-                child: Text(
-                  'Day 3',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Color(0xFF575757),
-                    fontSize: 8,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                    height: 0,
-                  ),
-                ),
-              ),
-              const Positioned(
-                left: 224,
-                top: 167,
-                child: Text(
-                  'Day 4',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Color(0xFF575757),
-                    fontSize: 8,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                    height: 0,
-                  ),
-                ),
-              ),
-              const Positioned(
-                left: 280,
-                top: 167,
-                child: Text(
-                  'Day 5',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Color(0xFF575757),
-                    fontSize: 8,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                    height: 0,
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 65,
-                top: 132,
-                child: Container(
-                  width: 5,
-                  height: 5,
-                  decoration: const ShapeDecoration(
-                    color: Color(0xFF50BE92),
-                    shape: OvalBorder(),
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 121,
-                top: 67,
-                child: Container(
-                  width: 5,
-                  height: 5,
-                  decoration: const ShapeDecoration(
-                    color: Color(0xFF50BE92),
-                    shape: OvalBorder(),
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 174,
-                top: 57,
-                child: Container(
-                  width: 5,
-                  height: 5,
-                  decoration: const ShapeDecoration(
-                    color: Color(0xFF50BE92),
-                    shape: OvalBorder(),
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 233,
-                top: 101,
-                child: Container(
-                  width: 5,
-                  height: 5,
-                  decoration: const ShapeDecoration(
-                    color: Color(0xFF50BE92),
-                    shape: OvalBorder(),
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 289,
-                top: 91,
-                child: Container(
-                  width: 5,
-                  height: 5,
-                  decoration: const ShapeDecoration(
-                    color: Color(0xFF50BE92),
-                    shape: OvalBorder(),
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 68,
-                top: 135,
-                child: Transform(
-                  transform: Matrix4.identity()
-                    ..translate(0.0, 0.0)
-                    ..rotateZ(-0.86),
-                  child: Container(
-                    width: 85.80,
-                    decoration: const ShapeDecoration(
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                          width: 1,
-                          strokeAlign: BorderSide.strokeAlignCenter,
-                          color: Color(0xFF50BE92),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 124,
-                top: 70,
-                child: Transform(
-                  transform: Matrix4.identity()
-                    ..translate(0.0, 0.0)
-                    ..rotateZ(-0.19),
-                  child: Container(
-                    width: 53.94,
-                    decoration: const ShapeDecoration(
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                          width: 1,
-                          strokeAlign: BorderSide.strokeAlignCenter,
-                          color: Color(0xFF50BE92),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 177,
-                top: 60,
-                child: Transform(
-                  transform: Matrix4.identity()
-                    ..translate(0.0, 0.0)
-                    ..rotateZ(0.65),
-                  child: Container(
-                    width: 72.80,
-                    decoration: const ShapeDecoration(
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                          width: 1,
-                          strokeAlign: BorderSide.strokeAlignCenter,
-                          color: Color(0xFF50BE92),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 236,
-                top: 104,
-                child: Transform(
-                  transform: Matrix4.identity()
-                    ..translate(0.0, 0.0)
-                    ..rotateZ(-0.18),
-                  child: Container(
-                    width: 55.90,
-                    decoration: const ShapeDecoration(
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                          width: 1,
-                          strokeAlign: BorderSide.strokeAlignCenter,
-                          color: Color(0xFF50BE92),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ],
@@ -974,7 +606,7 @@ class _DashboardState extends State<Dashboard> {
   }
 
   // ignore: non_constant_identifier_names
-// ignore: non_constant_identifier_names
+  // ignore: non_constant_identifier_names
   Widget NavigationButtomBar(BuildContext context) {
     return Positioned(
       bottom: 0,

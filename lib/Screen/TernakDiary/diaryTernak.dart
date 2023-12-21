@@ -1,4 +1,7 @@
+// main.dart
 import 'package:flutter/material.dart';
+import 'button.dart';
+import 'constant.dart';
 
 void main() {
   runApp(DiaryTernak());
@@ -19,7 +22,7 @@ class _DiaryTernakState extends State<DiaryTernak> {
       home: Scaffold(
         appBar: AppBar(
           title: const Text(
-            'Ternak Diary',
+            appTitle,
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.black,
@@ -30,73 +33,30 @@ class _DiaryTernakState extends State<DiaryTernak> {
             ),
           ),
         ),
-        body: Center(
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 76.0, vertical: 10.0),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              GestureDetector(
-                onHorizontalDragUpdate: (details) {
-                  if (details.primaryDelta! > 0) {
-                    // Geser ke kanan
-                    setState(() {
-                      isDiaryTernakActive = false;
-                      isDompetTernakActive = true;
-                    });
-                  } else if (details.primaryDelta! < 0) {
-                    // Geser ke kiri
-                    setState(() {
-                      isDiaryTernakActive = true;
-                      isDompetTernakActive = false;
-                    });
-                  }
+              DiaryTernakButton(
+                isActive: isDiaryTernakActive,
+                buttonText: 'Diary Ternak',
+                onPressed: () {
+                  setState(() {
+                    isDiaryTernakActive = true;
+                    isDompetTernakActive = false;
+                  });
                 },
-                child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      isDiaryTernakActive = true;
-                      isDompetTernakActive = false;
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        isDiaryTernakActive ? Colors.green : Colors.white,
-                    foregroundColor:
-                        isDiaryTernakActive ? Colors.white : Colors.green,
-                  ),
-                  child: const Text('Diary Ternak'),
-                ),
               ),
-              GestureDetector(
-                onHorizontalDragUpdate: (details) {
-                  if (details.primaryDelta! > 0) {
-                    // Geser ke kanan
-                    setState(() {
-                      isDiaryTernakActive = false;
-                      isDompetTernakActive = true;
-                    });
-                  } else if (details.primaryDelta! < 0) {
-                    // Geser ke kiri
-                    setState(() {
-                      isDiaryTernakActive = true;
-                      isDompetTernakActive = false;
-                    });
-                  }
+              DiaryTernakButton(
+                isActive: isDompetTernakActive,
+                buttonText: 'Dompet Ternak',
+                onPressed: () {
+                  setState(() {
+                    isDiaryTernakActive = false;
+                    isDompetTernakActive = true;
+                  });
                 },
-                child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      isDiaryTernakActive = false;
-                      isDompetTernakActive = true;
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        isDompetTernakActive ? Colors.green : Colors.white,
-                    foregroundColor:
-                        isDompetTernakActive ? Colors.white : Colors.green,
-                  ),
-                  child: const Text('Dompet Ternak'),
-                ),
               ),
             ],
           ),
