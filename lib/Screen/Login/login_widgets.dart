@@ -3,6 +3,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ikiternak_apps/Screen/register/regist_screen.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+Future signIn() async {
+  await GoogleSignIn().signIn();
+}
 
 Widget buildLogo() {
   return Positioned(
@@ -113,6 +119,12 @@ Widget buildLoginWithText() {
               GestureDetector(
                 onTap: () {
                   // Handle Facebook login
+                  FacebookAuth.instance.login(
+                      permissions: ["public_profile", "email"]).then((value) {
+                    FacebookAuth.instance.getUserData().then((userData) {
+                      print(userData);
+                    });
+                  });
                 },
                 child: Image.asset('assets/icon/facebook_icon.png', height: 30),
               ),
