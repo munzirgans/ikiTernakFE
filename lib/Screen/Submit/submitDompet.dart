@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:ikiternak_apps/Screen/DompetTernak/dompertTernak.dart';
 import 'package:intl/intl.dart';
 
 void main() {
@@ -16,14 +15,6 @@ class submitDompet extends StatefulWidget {
 
 class _submitDompetState extends State<submitDompet> {
   DateTime? selectedDate;
-
-  void _onCancelPressed() {
-    // Navigate to DompetTernak when Cancel button is pressed
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => DompetTernak()),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
