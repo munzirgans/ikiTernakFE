@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:ikiternak_apps/Screen/DompetTernak/dompertTernak.dart';
+
 import 'package:ikiternak_apps/Screen/Homepage/dashboard_screen.dart';
+import 'package:ikiternak_apps/Screen/TernakDiary/diaryTernak.dart';
 import 'package:ikiternak_apps/Screen/forum/forumTernak.dart';
 import 'button.dart';
 import 'constant.dart';
-import 'package:fl_chart/fl_chart.dart';
 
 void main() {
-  runApp(DiaryTernak());
+  runApp(DompetTernak());
 }
 
 class ReportData {
@@ -22,14 +22,14 @@ class ReportData {
   });
 }
 
-class DiaryTernak extends StatefulWidget {
+class DompetTernak extends StatefulWidget {
   @override
-  _DiaryTernakState createState() => _DiaryTernakState();
+  _DompetTernakState createState() => _DompetTernakState();
 }
 
-class _DiaryTernakState extends State<DiaryTernak> {
-  bool isDiaryTernakActive = true;
-  bool isDompetTernakActive = false;
+class _DompetTernakState extends State<DompetTernak> {
+  bool isDiaryTernakActive = false;
+  bool isDompetTernakActive = true;
 
   List<ReportData> reportDataList = [
     ReportData(
@@ -87,7 +87,7 @@ class _DiaryTernakState extends State<DiaryTernak> {
                       ],
                     ),
                     const SizedBox(height: 20),
-                    buildGrafik(context),
+                    // buildGrafik(context),
                     const SizedBox(height: 20),
                     Expanded(
                       child: ListView.builder(
@@ -133,17 +133,17 @@ class _DiaryTernakState extends State<DiaryTernak> {
   Widget buildDiaryTernakButton(String buttonText, bool isActive) {
     return Container(
       width: 120,
-      child: DiaryTernakButton(
+      child: DompetTernakButton(
         isActive: isActive,
         buttonText: buttonText,
         onPressed: () {
           setState(() {
             isDiaryTernakActive = buttonText == 'Diary Ternak';
             isDompetTernakActive = buttonText == 'Dompet Ternak';
-            if (isDompetTernakActive) {
+            if (isDiaryTernakActive) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => DompetTernak()),
+                MaterialPageRoute(builder: (context) => DiaryTernak()),
               );
             }
           });
@@ -152,47 +152,7 @@ class _DiaryTernakState extends State<DiaryTernak> {
     );
   }
 
-  Widget buildGrafik(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          width: 390,
-          height: 192,
-          child: LineChart(
-            LineChartData(
-              gridData: const FlGridData(show: false),
-              titlesData: const FlTitlesData(show: false),
-              borderData: FlBorderData(
-                show: true,
-                border: Border.all(color: const Color(0xFFD8DCDA), width: 1),
-              ),
-              minX: 0,
-              maxX: 6,
-              minY: 0,
-              maxY: 100,
-              lineBarsData: [
-                LineChartBarData(
-                  spots: const [
-                    FlSpot(1, 20),
-                    FlSpot(2, 40),
-                    FlSpot(3, 60),
-                    FlSpot(4, 80),
-                    FlSpot(5, 40),
-                    FlSpot(6, 60),
-                  ],
-                  isCurved: true,
-                  color: const Color(0xFF50BE92),
-                  barWidth: 2,
-                  isStrokeCapRound: true,
-                  belowBarData: BarAreaData(show: false),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
+  // Hapus kode grafik
 
   Widget buildReportCard(ReportData reportData) {
     return Container(
@@ -397,7 +357,7 @@ class NavigationButtomBar extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => DiaryTernak()),
+                  MaterialPageRoute(builder: (context) => DompetTernak()),
                 );
               },
             ),

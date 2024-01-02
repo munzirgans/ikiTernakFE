@@ -5,7 +5,7 @@ import 'package:ikiternak_apps/Screen/Login/login_screen.dart';
 import 'package:http/http.dart' as http;
 
 class RegistScreen2 extends StatefulWidget {
-  const RegistScreen2({Key? key}) : super(key: key);
+  const RegistScreen2({super.key});
 
   @override
   _RegistScreenState createState() => _RegistScreenState();

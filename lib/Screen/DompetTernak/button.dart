@@ -2,12 +2,13 @@
 import 'package:flutter/material.dart';
 import 'constant.dart';
 
-class DiaryTernakButton extends StatelessWidget {
+class DompetTernakButton extends StatelessWidget {
   final bool isActive;
   final String buttonText;
   final VoidCallback onPressed;
 
-  const DiaryTernakButton({super.key, 
+  const DompetTernakButton({
+    super.key,
     required this.isActive,
     required this.buttonText,
     required this.onPressed,

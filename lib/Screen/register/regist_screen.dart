@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ikiternak_apps/Screen/Login/login_screen.dart';
 import 'package:http/http.dart' as http;
 import 'package:ikiternak_apps/Screen/register/regist_page2.dart';
 
