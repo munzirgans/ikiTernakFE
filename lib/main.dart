@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:ikiternak_apps/Screen/LaunchApp/launch_screen.dart';
 import 'package:ikiternak_apps/Screen/Login/login_screen.dart';
 import 'package:ikiternak_apps/Screen/register/regist_screen.dart';
 import 'package:ikiternak_apps/Screen/Homepage/dashboard_screen.dart';
 
-void main() => runApp(const MyApp());
+void main() async {
+  await dotenv.load();
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -16,7 +20,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const LaunchScreenPage(),
         '/login': (context) => const LoginScreen(),
-        '/register': (context) => const RegistScreen(),
+        '/register': (context) => RegistScreen(),
         '/dashborad': (context) => const DashboardScreen(),
       },
     );

@@ -119,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   buildSignUpText(context),
-                  buildLoginWithText(),
+                  buildLoginWithText(context),
                 ],
               ),
             ),

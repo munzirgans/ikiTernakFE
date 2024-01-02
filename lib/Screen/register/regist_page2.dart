@@ -1,11 +1,23 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ikiternak_apps/Environtment.dart';
+import 'package:ikiternak_apps/Screen/Layout/alert_dialog.dart';
 import 'package:ikiternak_apps/Screen/Login/login_screen.dart';
 import 'package:http/http.dart' as http;
 
 class RegistScreen2 extends StatefulWidget {
-  const RegistScreen2({Key? key}) : super(key: key);
+  final String username;
+  final String email;
+  final String password;
+
+  const RegistScreen2({
+    Key? key,
+    required this.username,
+    required this.email,
+    required this.password,
+  }) : super(key: key);
 
   @override
   _RegistScreenState createState() => _RegistScreenState();
@@ -18,26 +30,38 @@ class _RegistScreenState extends State<RegistScreen2> {
   final TextEditingController _addressController = TextEditingController();
 
   Future<void> registerUser() async {
-    const String apiURL = "http://192.168.18.23:3000/auth/register";
+    // const String apiURL = "http://localhost:3000/auth/register";
+    const String path = "/auth/register";
+    String? apiURL = Env.apiURL! + path;
+
     final Map<String, dynamic> userData = {
-      'Fullname': _fullnameController.text,
-      'email': _birthdateController.text,
-      'username': _selectedGender == 'Select' ? '' : _selectedGender,
-      'password': _addressController.text,
+      'username': widget.username,
+      'email': widget.email,
+      'password': widget.password,
+      'name': _fullnameController.text,
+      'birthdate': _birthdateController.text,
+      'gender': _selectedGender,
+      'address': _addressController.text,
+      'is_socmed': 0,
     };
 
     try {
-      final response = await http.post(
+      http
+          .post(
         Uri.parse(apiURL),
-        headers: {'Content-Type': 'application/json'},
+        headers: {'Content-type': 'application/json'},
         body: jsonEncode(userData),
-      );
-
-      if (response.statusCode == 200) {
-        print("Berhasil registrasi!");
-      } else {
-        print("Tidak berhasil registrasi!");
-      }
+      )
+          .then((response) {
+        var jsonResponse = jsonDecode(response.body);
+        if (response.statusCode == 200) {
+          AlertDialogWidget.showAlertDialog(context, "Registration Success",
+              "Your account is created, please login!");
+        } else {
+          AlertDialogWidget.showAlertDialog(
+              context, "Error", jsonResponse['message']);
+        }
+      });
     } catch (error) {
       print('Error: $error');
     }
@@ -291,6 +315,11 @@ class _RegistScreenState extends State<RegistScreen2> {
                 onChanged: (String? newValue) {
                   setState(() {
                     _selectedGender = newValue == 'Select' ? null : newValue;
+                    // if (_selectedGender == "Laki-laki") {
+                    //   _selectedGender = "L";
+                    // } else {
+                    //   _selectedGender = "P";
+                    // }
                   });
                 },
               ),
@@ -316,10 +345,4 @@ class _RegistScreenState extends State<RegistScreen2> {
       controller.text = formattedDate;
     }
   }
-}
-
-void main() {
-  runApp(const MaterialApp(
-    home: RegistScreen2(),
-  ));
 }

@@ -16,34 +16,12 @@ class RegistScreen extends StatefulWidget {
 }
 
 class _RegistScreenState extends State<RegistScreen> {
-  final TextEditingController _fullnameController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   // ignore: non_constant_identifier_names
   final TextEditingController _passwordController = TextEditingController();
-
-  Future<void> registerUser() async {
-    const String apiURL = "http://192.168.18.23:3000/auth/register";
-    final Map<String, dynamic> userData = {
-      'name': _fullnameController.text,
-      'email': _emailController.text,
-      'username': _usernameController.text,
-      'password': _passwordController.text
-    };
-
-    try {
-      final response = await http.post(Uri.parse(apiURL),
-          headers: {'Content-Type': 'application/json'},
-          body: jsonEncode(userData));
-      if (response.statusCode == 200) {
-        print("Berhasil registrasi!");
-      } else {
-        print("Tidak berhasil registrasi!");
-      }
-    } catch (error) {
-      print('Error: $error');
-    }
-  }
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   // void initState(){
 
   // }
@@ -110,18 +88,23 @@ class _RegistScreenState extends State<RegistScreen> {
         children: <Widget>[
           _buildWelcomeText(),
           _buildLoginText(),
-          _buildInputField('Full name', _fullnameController, 'Your Full Name'),
           _buildInputField('Username', _usernameController, 'Your Username'),
           _buildInputField(
               'Email', _emailController, 'Your Email. Ex : abcde@lalala.com'),
           _buildInputField('Password', _passwordController, 'Your Password'),
+          _buildInputField('Confirm Password', _confirmPasswordController,
+              'Confirm Password'),
           const SizedBox(height: 15),
           ElevatedButton(
             onPressed: () {
-              registerUser();
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const RegistScreen2()),
+                MaterialPageRoute(
+                    builder: (context) => RegistScreen2(
+                          username: _usernameController.text,
+                          email: _emailController.text,
+                          password: _passwordController.text,
+                        )),
               );
             },
             style: ElevatedButton.styleFrom(

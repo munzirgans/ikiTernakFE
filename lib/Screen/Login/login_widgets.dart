@@ -1,13 +1,49 @@
 // login_widgets.dart
 
+import 'dart:convert';
+// import 'dart:js';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ikiternak_apps/Screen/Homepage/dashboard_screen.dart';
+import 'package:ikiternak_apps/Screen/Layout/alert_dialog.dart';
 import 'package:ikiternak_apps/Screen/register/regist_screen.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:ikiternak_apps/api/google_signin_api.dart';
+import 'package:ikiternak_apps/environtment.dart';
+import 'package:http/http.dart' as http;
 
-Future signIn() async {
-  await GoogleSignIn().signIn();
+Future signIn(BuildContext context) async {
+  final user = await GoogleSignInAPI.login();
+  const String path = "/auth/login";
+  String? apiURL = Env.apiURL! + path;
+  final Map<String, dynamic> data = {
+    'name': user?.displayName,
+    'email': user?.email,
+    'is_socmed': 1,
+  };
+  try {
+    http
+        .post(Uri.parse(apiURL),
+            headers: {'Content-type': 'application/json'},
+            body: jsonEncode(data))
+        .then((response) {
+      var jsonResponse = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const DashboardScreen()),
+        );
+      } else {
+        AlertDialogWidget.showAlertDialog(
+            context, "Error", jsonResponse['message']);
+      }
+    });
+  } catch (error) {
+    print('Error: $error');
+  }
+  // final Map<String, dynamic> data =
 }
 
 Widget buildLogo() {
@@ -61,7 +97,7 @@ Widget buildSignUpText(BuildContext context) {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const RegistScreen()),
+            MaterialPageRoute(builder: (context) => RegistScreen()),
           );
         },
         child: RichText(
@@ -89,7 +125,7 @@ Widget buildSignUpText(BuildContext context) {
   );
 }
 
-Widget buildLoginWithText() {
+Widget buildLoginWithText(BuildContext context) {
   return Column(
     children: [
       Padding(
@@ -117,14 +153,8 @@ Widget buildLoginWithText() {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               GestureDetector(
-                onTap: () {
-                  // Handle Facebook login
-                  FacebookAuth.instance.login(
-                      permissions: ["public_profile", "email"]).then((value) {
-                    FacebookAuth.instance.getUserData().then((userData) {
-                      print(userData);
-                    });
-                  });
+                onTap: () async {
+                  await facebookHandle(context);
                 },
                 child: Image.asset('assets/icon/facebook_icon.png', height: 30),
               ),
@@ -132,6 +162,7 @@ Widget buildLoginWithText() {
               GestureDetector(
                 onTap: () {
                   // Handle Google login
+                  signIn(context);
                 },
                 child: Image.asset('assets/icon/google_icon.png', height: 30),
               ),
@@ -141,4 +172,44 @@ Widget buildLoginWithText() {
       ),
     ],
   );
+}
+
+Future<void> facebookHandle(BuildContext context) async {
+  Map<String, dynamic>? userData = {};
+  FacebookAuth.instance
+      .login(permissions: ["public_profile", "email"]).then((value) {
+    FacebookAuth.instance.getUserData().then((fbuserData) {
+      userData = fbuserData.isNotEmpty ? fbuserData : null;
+      if (userData != null) {
+        const String path = "/auth/login";
+        String? apiURL = Env.apiURL! + path;
+        final Map<String, dynamic> data = {
+          'name': userData!['name'],
+          'email': userData!['email'],
+          'is_socmed': 1,
+        };
+        try {
+          http
+              .post(Uri.parse(apiURL),
+                  headers: {'Content-type': 'application/json'},
+                  body: jsonEncode(data))
+              .then((response) {
+            var jsonResponse = jsonDecode(response.body);
+            if (response.statusCode == 200) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const DashboardScreen()),
+              );
+            } else {
+              AlertDialogWidget.showAlertDialog(
+                  context, "Error", jsonResponse['message']);
+            }
+          });
+        } catch (error) {
+          print('Error: $error');
+        }
+      }
+    });
+  });
 }
