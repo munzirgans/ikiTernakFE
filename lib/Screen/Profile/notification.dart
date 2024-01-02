@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ikiternak_apps/Screen/Profile/profile.dart';
 
 void main() {
   runApp(const Notif());
@@ -15,19 +16,19 @@ class Notif extends StatelessWidget {
       ),
       home: Scaffold(
         body: ListView(children: [
-          Notification(),
+          NotificationScreen(),
         ]),
       ),
     );
   }
 }
 
-class Notification extends StatefulWidget {
+class NotificationScreen extends StatefulWidget {
   @override
-  _NotificationState createState() => _NotificationState();
+  _NotificationScreenState createState() => _NotificationScreenState();
 }
 
-class _NotificationState extends State<Notification> {
+class _NotificationScreenState extends State<NotificationScreen> {
   bool myTernakNotification = false;
   bool forumNotification = false;
   bool popupNotification = false;
@@ -41,10 +42,10 @@ class _NotificationState extends State<Notification> {
           width: 390,
           height: 844,
           clipBehavior: Clip.antiAlias,
-          decoration: const BoxDecoration(color: Color(0xFFF7F7F7)),
+          decoration: BoxDecoration(color: Color(0xFFF7F7F7)),
           child: Stack(
             children: [
-              const Positioned(
+              Positioned(
                 left: 28,
                 top: 100,
                 child: Text(
@@ -62,7 +63,7 @@ class _NotificationState extends State<Notification> {
                 left: 26,
                 top: 140,
                 child: _buildToggle(
-                  'Turn On MyTernak notification',
+                  'Turn On IkiTernak notification',
                   myTernakNotification,
                   (value) {
                     setState(() {
@@ -115,10 +116,13 @@ class _NotificationState extends State<Notification> {
                 top: 51,
                 child: TextButton(
                   onPressed: () {
-                    // Implementasi aksi untuk tombol "Cancel" di sini
-                    print('Cancel button pressed');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Userprofile()),
+                    );
                   },
-                  child: const Text(
+                  child: Text(
                     'Cancel',
                     style: TextStyle(
                       color: Colors.black,
@@ -137,16 +141,21 @@ class _NotificationState extends State<Notification> {
                   onPressed: () {
                     // Implementasi aksi untuk tombol "Save" di sini
                     print('Save button pressed');
+                    // Menampilkan dialog jika turn on myTernak Notification menyala
+                    if (myTernakNotification) {
+                      _showSuccessDialog();
+                    }
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.transparent, // Menghilangkan warna latar
+                    backgroundColor:
+                        Colors.transparent, // Menghilangkan warna latar
                     shadowColor: Colors.transparent, // Menghilangkan bayangan
                     shape: RoundedRectangleBorder(
-                      side: const BorderSide(color: Colors.transparent),
+                      side: BorderSide(color: Colors.transparent),
                       borderRadius: BorderRadius.circular(0),
                     ),
                   ),
-                  child: const Text(
+                  child: Text(
                     'Save',
                     style: TextStyle(
                       color: Colors.black,
@@ -172,7 +181,7 @@ class _NotificationState extends State<Notification> {
       decoration: ShapeDecoration(
         color: Colors.white,
         shape: RoundedRectangleBorder(
-          side: const BorderSide(width: 1, color: Color(0xFFEBEBEB)),
+          side: BorderSide(width: 1, color: Color(0xFFEBEBEB)),
           borderRadius: BorderRadius.circular(10),
         ),
       ),
@@ -182,7 +191,7 @@ class _NotificationState extends State<Notification> {
             padding: const EdgeInsets.only(left: 16.0),
             child: Text(
               label,
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.black,
                 fontSize: 14,
                 fontFamily: 'Poppins',
@@ -191,19 +200,39 @@ class _NotificationState extends State<Notification> {
               ),
             ),
           ),
-          const Spacer(),
+          Spacer(),
           Switch(
             value: value,
             onChanged: onChanged,
-            activeColor: const Color.fromARGB(
-                255, 255, 255, 255), // Color when toggle is ON
-            activeTrackColor: const Color.fromARGB(255, 82, 171, 141),
-            inactiveThumbColor: const Color.fromARGB(255, 255, 255, 255),
+            activeColor:
+                Color.fromARGB(255, 255, 255, 255), // Color when toggle is ON
+            activeTrackColor: Color.fromARGB(255, 82, 171, 141),
+            inactiveThumbColor: Color.fromARGB(255, 255, 255, 255),
             inactiveTrackColor:
                 Colors.grey[400]!, // Thumb color when toggle is OFF
           ),
         ],
       ),
+    );
+  }
+
+  // Fungsi untuk menampilkan dialog notifikasi berhasil dinyalakan
+  void _showSuccessDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Notifications turned on successfully!'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

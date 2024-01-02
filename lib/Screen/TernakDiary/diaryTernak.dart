@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ikiternak_apps/Screen/DompetTernak/dompertTernak.dart';
 import 'package:ikiternak_apps/Screen/Homepage/dashboard_screen.dart';
+import 'package:ikiternak_apps/Screen/Profile/profile.dart';
 import 'package:ikiternak_apps/Screen/Submit/submitDiary.dart';
 import 'package:ikiternak_apps/Screen/forum/forumTernak.dart';
 import 'button.dart';
@@ -431,7 +432,10 @@ class NavigationButtomBar extends StatelessWidget {
                 height: 35,
               ),
               onPressed: () {
-                // Handle tombol forum
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Userprofile()),
+                );
               },
             ),
           ],
