@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:ikiternak_apps/Screen/Homepage/dashboard_screen.dart';
+import 'package:ikiternak_apps/Screen/Submit/submitDompet.dart';
 import 'package:ikiternak_apps/Screen/TernakDiary/diaryTernak.dart';
 import 'package:ikiternak_apps/Screen/forum/forumTernak.dart';
 import 'button.dart';
@@ -88,7 +89,7 @@ class _DompetTernakState extends State<DompetTernak> {
                     ),
                     const SizedBox(height: 20),
                     // buildGrafik(context),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 200),
                     Expanded(
                       child: ListView.builder(
                         itemCount: reportDataList.length + 5,
@@ -120,7 +121,8 @@ class _DompetTernakState extends State<DompetTernak> {
               bottom: 20,
               right: 16,
               child: buildIconButton('assets/icon/add.png', () {
-                // Handle aksi onPressed
+                submitDompett(
+                    context); // Call the submitDompett function with context
               }),
             ),
           ],
@@ -398,6 +400,13 @@ Widget buildIconButton(String assetPath, VoidCallback onPressed) {
       width: 70,
       height: 65,
     ),
-    onPressed: onPressed,
+    onPressed: onPressed, // This should call onPressed
+  );
+}
+
+void submitDompett(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => submitDompet()),
   );
 }
