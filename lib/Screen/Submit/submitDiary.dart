@@ -3,11 +3,11 @@ import 'package:ikiternak_apps/Screen/TernakDiary/diaryTernak.dart';
 import 'package:intl/intl.dart';
 
 void main() {
-  runApp(const submitDiary());
+  runApp(const SubmitDiary());
 }
 
-class submitDiary extends StatelessWidget {
-  const submitDiary({Key? key}) : super(key: key);
+class SubmitDiary extends StatelessWidget {
+  const SubmitDiary({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,32 +17,32 @@ class submitDiary extends StatelessWidget {
       ),
       home: Scaffold(
         body: ListView(children: [
-          SubmitDiary(),
+          SubmitDiaryForm(),
         ]),
       ),
     );
   }
 }
 
-class SubmitDiary extends StatefulWidget {
+class SubmitDiaryForm extends StatefulWidget {
   @override
-  _SubmitDiaryState createState() => _SubmitDiaryState();
+  _SubmitDiaryFormState createState() => _SubmitDiaryFormState();
 }
 
-class _SubmitDiaryState extends State<SubmitDiary> {
+class _SubmitDiaryFormState extends State<SubmitDiaryForm> {
   DateTime? selectedDate;
   TextEditingController harvestDateController = TextEditingController();
   TextEditingController quantityController = TextEditingController();
 
   void onSubmitPressed() {
-    String harvestDate = harvestDateController.text;
-    String quantity = quantityController.text;
-
-    // Now you can send harvestDate and quantity to your API
-    print('Submit Pressed - Harvest Date: $harvestDate, Quantity: $quantity');
+    // Implement your logic when the Submit button is pressed
+    print('Submit Pressed');
+    print('Harvest Date: ${harvestDateController.text}');
+    print('Quantity: ${quantityController.text}');
   }
 
   void onCancelPressed() {
+    // Navigate to DiaryTernak when Cancel button is pressed
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => DiaryTernak()),

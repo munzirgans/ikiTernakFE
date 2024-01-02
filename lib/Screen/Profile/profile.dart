@@ -45,7 +45,7 @@ class Logout extends StatelessWidget {
           width: 390,
           height: 844,
           clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(color: Color(0xFFF7F7F7)),
+          decoration: const BoxDecoration(color: Color(0xFFF7F7F7)),
           child: Stack(
             children: [
               Positioned(
@@ -54,10 +54,10 @@ class Logout extends StatelessWidget {
                 child: Container(
                   width: 390,
                   height: 171,
-                  decoration: BoxDecoration(color: Color(0xFF50BE92)),
+                  decoration: const BoxDecoration(color: Color(0xFF50BE92)),
                 ),
               ),
-              Positioned(
+              const Positioned(
                 left: 28,
                 top: 66,
                 child: Text(
@@ -93,19 +93,19 @@ class Logout extends StatelessWidget {
                             width: 55,
                             height: 55,
                             decoration: ShapeDecoration(
-                              image: DecorationImage(
+                              image: const DecorationImage(
                                 image: AssetImage('assets/icon/muns.png'),
                                 fit: BoxFit.fill,
                               ),
                               shape: RoundedRectangleBorder(
-                                side: BorderSide(
+                                side: const BorderSide(
                                     width: 1, color: Color(0xFFDCE3E0)),
                                 borderRadius: BorderRadius.circular(15),
                               ),
                             ),
                           ),
                         ),
-                        Positioned(
+                        const Positioned(
                           left: 70,
                           top: 0,
                           child: Column(
@@ -146,7 +146,7 @@ class Logout extends StatelessWidget {
                               width: 290,
                               height: 27,
                               decoration: ShapeDecoration(
-                                color: Color(0xFF50BE92),
+                                color: const Color(0xFF50BE92),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20),
                                 ),
@@ -154,7 +154,7 @@ class Logout extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Positioned(
+                        const Positioned(
                           left: 120,
                           top: 72,
                           child: Text(
@@ -176,7 +176,7 @@ class Logout extends StatelessWidget {
               Positioned(
                 left: 30,
                 top: 262,
-                child: Container(
+                child: SizedBox(
                   width: 335,
                   height: 257,
                   child: Stack(
@@ -192,7 +192,7 @@ class Logout extends StatelessWidget {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            shadows: [
+                            shadows: const [
                               BoxShadow(
                                 color: Color(0x19000000),
                                 blurRadius: 15,
@@ -215,7 +215,7 @@ class Logout extends StatelessWidget {
                                   builder: (context) => const Notif()),
                             );
                           },
-                          child: Container(
+                          child: SizedBox(
                             width: 107,
                             height: 20,
                             child: Row(
@@ -224,8 +224,8 @@ class Logout extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Image.asset(notificationsIcon),
-                                SizedBox(width: 8),
-                                Text(
+                                const SizedBox(width: 8),
+                                const Text(
                                   'Notifications',
                                   style: TextStyle(
                                     color: Colors.black,
@@ -252,7 +252,7 @@ class Logout extends StatelessWidget {
                                   builder: (context) => const UbahBahasa()),
                             );
                           },
-                          child: Container(
+                          child: SizedBox(
                             width: 94,
                             height: 20,
                             child: Row(
@@ -261,8 +261,8 @@ class Logout extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Image.asset(languageIcon),
-                                SizedBox(width: 8),
-                                Text(
+                                const SizedBox(width: 8),
+                                const Text(
                                   'Language',
                                   style: TextStyle(
                                     color: Colors.black,
@@ -291,8 +291,8 @@ class Logout extends StatelessWidget {
                           child: Row(
                             children: [
                               Image.asset(passwordIcon),
-                              SizedBox(width: 8),
-                              Text(
+                              const SizedBox(width: 8),
+                              const Text(
                                 'Change Password',
                                 style: TextStyle(
                                   color: Colors.black,
@@ -318,7 +318,7 @@ class Logout extends StatelessWidget {
                                   builder: (context) => const FaqPage()),
                             );
                           },
-                          child: Container(
+                          child: SizedBox(
                             width: 65,
                             height: 20,
                             child: Row(
@@ -327,8 +327,8 @@ class Logout extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Image.asset(faqIcon),
-                                SizedBox(width: 8),
-                                Text(
+                                const SizedBox(width: 8),
+                                const Text(
                                   'F.A.Q.',
                                   style: TextStyle(
                                     color: Colors.black,
@@ -348,7 +348,7 @@ class Logout extends StatelessWidget {
                         top: 54,
                         child: Container(
                           width: 260,
-                          decoration: ShapeDecoration(
+                          decoration: const ShapeDecoration(
                             shape: RoundedRectangleBorder(
                               side: BorderSide(
                                 width: 1,
@@ -364,7 +364,7 @@ class Logout extends StatelessWidget {
                         top: 105,
                         child: Container(
                           width: 260,
-                          decoration: ShapeDecoration(
+                          decoration: const ShapeDecoration(
                             shape: RoundedRectangleBorder(
                               side: BorderSide(
                                 width: 1,
@@ -380,7 +380,7 @@ class Logout extends StatelessWidget {
                         top: 156,
                         child: Container(
                           width: 260,
-                          decoration: ShapeDecoration(
+                          decoration: const ShapeDecoration(
                             shape: RoundedRectangleBorder(
                               side: BorderSide(
                                 width: 1,
@@ -396,7 +396,7 @@ class Logout extends StatelessWidget {
                         top: 207,
                         child: Container(
                           width: 260,
-                          decoration: ShapeDecoration(
+                          decoration: const ShapeDecoration(
                             shape: RoundedRectangleBorder(
                               side: BorderSide(
                                 width: 1,
@@ -415,7 +415,7 @@ class Logout extends StatelessWidget {
                             // Fungsi yang akan dipanggil saat teks "Log Out" ditekan
                             print('Log Out Tapped');
                           },
-                          child: Container(
+                          child: SizedBox(
                             width: 79,
                             height: 18,
                             child: Row(
@@ -424,8 +424,8 @@ class Logout extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Image.asset(logoutIcon),
-                                SizedBox(width: 8),
-                                Text(
+                                const SizedBox(width: 8),
+                                const Text(
                                   'Log Out',
                                   style: TextStyle(
                                     color: Colors.black,
@@ -443,10 +443,10 @@ class Logout extends StatelessWidget {
                       Positioned(
                         left: 13,
                         top: 120,
-                        child: Container(
+                        child: SizedBox(
                           width: 16,
                           height: 20,
-                          child: Stack(children: []),
+                          child: const Stack(children: []),
                         ),
                       ),
                     ],
