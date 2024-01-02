@@ -33,18 +33,18 @@ class SubmitDiary extends StatefulWidget {
 
 class _SubmitDiaryState extends State<SubmitDiary> {
   DateTime? selectedDate;
+  TextEditingController harvestDateController = TextEditingController();
+  TextEditingController quantityController = TextEditingController();
 
   void onSubmitPressed() {
-    // Implement your logic when the Submit button is pressed
-    const String path = "/diaryternak";
-    String? apiURL = Env.apiURL! + path;
-    // final Map<String, dynamic> data = {
-    //   'harvest_date': selectedDate,
-    // }
+    String harvestDate = harvestDateController.text;
+    String quantity = quantityController.text;
+
+    // Now you can send harvestDate and quantity to your API
+    print('Submit Pressed - Harvest Date: $harvestDate, Quantity: $quantity');
   }
 
   void onCancelPressed() {
-    // Navigate to DiaryTernak when Cancel button is pressed
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => DiaryTernak()),
@@ -102,12 +102,7 @@ class _SubmitDiaryState extends State<SubmitDiary> {
                         child: AbsorbPointer(
                           child: TextField(
                             style: const TextStyle(color: Colors.black),
-                            controller: TextEditingController(
-                              text: selectedDate != null
-                                  ? DateFormat('dd-MM-yyyy')
-                                      .format(selectedDate!)
-                                  : '',
-                            ),
+                            controller: harvestDateController,
                             decoration: const InputDecoration(
                               hintText: 'Enter Date',
                               hintStyle: TextStyle(color: Colors.grey),
@@ -144,9 +139,10 @@ class _SubmitDiaryState extends State<SubmitDiary> {
                     Container(
                       width: 230,
                       margin: const EdgeInsets.only(left: 80),
-                      child: const TextField(
-                        style: TextStyle(color: Colors.black),
-                        decoration: InputDecoration(
+                      child: TextField(
+                        style: const TextStyle(color: Colors.black),
+                        controller: quantityController,
+                        decoration: const InputDecoration(
                           hintStyle: TextStyle(color: Colors.grey),
                           enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.grey),
@@ -202,6 +198,7 @@ class _SubmitDiaryState extends State<SubmitDiary> {
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
+        harvestDateController.text = DateFormat('dd-MM-yyyy').format(picked);
       });
     }
   }

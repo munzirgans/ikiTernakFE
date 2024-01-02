@@ -16,14 +16,9 @@ class submitDompet extends StatefulWidget {
 
 class _submitDompetState extends State<submitDompet> {
   DateTime? selectedDate;
-
-  void _onCancelPressed() {
-    // Navigate to DompetTernak when Cancel button is pressed
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => DompetTernak()),
-    );
-  }
+  final TextEditingController _amountController = TextEditingController();
+  final TextEditingController _categoryController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,13 +32,23 @@ class _submitDompetState extends State<submitDompet> {
             SubmitDompet(
               selectedDate: selectedDate,
               onDateChanged: _onDateChanged,
+              amountController: _amountController,
+              categoryController: _categoryController,
+              descriptionController: _descriptionController,
               onCancelPressed: () {
-                // Tambahkan aksi untuk tombol Cancel di sini
-                print('Cancel Pressed');
+                // Navigate to DompetTernak screen when Cancel button is pressed
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => DompetTernak()),
+                );
               },
               onSubmitPressed: () {
                 // Tambahkan aksi untuk tombol Submit di sini
                 print('Submit Pressed');
+                print('Date: ${selectedDate.toString()}');
+                print('Amount: ${_amountController.text}');
+                print('Category: ${_categoryController.text}');
+                print('Description: ${_descriptionController.text}');
               },
             ),
           ],
@@ -82,17 +87,21 @@ class ExpenseScreen extends StatelessWidget {
 class SubmitDompet extends StatelessWidget {
   final DateTime? selectedDate;
   final Function(DateTime) onDateChanged;
+  final TextEditingController amountController;
+  final TextEditingController categoryController;
+  final TextEditingController descriptionController;
   final VoidCallback? onCancelPressed;
   final VoidCallback? onSubmitPressed;
 
   SubmitDompet({
     required this.selectedDate,
     required this.onDateChanged,
+    required this.amountController,
+    required this.categoryController,
+    required this.descriptionController,
     this.onCancelPressed,
     this.onSubmitPressed,
   });
-
-  final _amountController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -244,6 +253,7 @@ class SubmitDompet extends StatelessWidget {
                       margin: EdgeInsets.only(left: 35),
                       child: TextField(
                         style: TextStyle(color: Colors.black),
+                        controller: amountController,
                         keyboardType: TextInputType.number,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
@@ -284,6 +294,7 @@ class SubmitDompet extends StatelessWidget {
                       margin: EdgeInsets.only(left: 30),
                       child: TextField(
                         style: TextStyle(color: Colors.black),
+                        controller: categoryController,
                         decoration: InputDecoration(
                           hintText: 'Enter Category',
                           hintStyle: TextStyle(color: Colors.grey),
@@ -319,6 +330,7 @@ class SubmitDompet extends StatelessWidget {
                       margin: EdgeInsets.only(left: 15),
                       child: TextField(
                         style: TextStyle(color: Colors.black),
+                        controller: descriptionController,
                         decoration: InputDecoration(
                           hintText: 'Enter Description',
                           hintStyle: TextStyle(color: Colors.grey),

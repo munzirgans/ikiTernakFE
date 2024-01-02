@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ikiternak_apps/Screen/Profile/profile.dart';
 
 void main() {
   runApp(const FaqPage());
@@ -62,7 +63,11 @@ class _FaqState extends State<Faq> {
                 top: 51,
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.pop(context); // Menutup layar FAQ
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Userprofile()),
+                    ); // Menutup layar FAQ
                   },
                   child: const Text(
                     'Cancel',

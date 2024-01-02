@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ikiternak_apps/Screen/Profile/profile.dart';
 import 'package:ikiternak_apps/Screen/TernakDiary/diaryTernak.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:ikiternak_apps/Screen/forum/forumTernak.dart';
@@ -664,7 +665,10 @@ class _DashboardState extends State<Dashboard> {
                 height: 35,
               ),
               onPressed: () {
-                // Handle forum button tap
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Userprofile()),
+                );
               },
             ),
           ],

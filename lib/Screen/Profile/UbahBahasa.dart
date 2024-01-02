@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ikiternak_apps/Screen/Profile/profile.dart';
 
 void main() {
   runApp(const UbahBahasa());
@@ -14,9 +15,11 @@ class UbahBahasa extends StatelessWidget {
         scaffoldBackgroundColor: const Color.fromARGB(255, 18, 32, 47),
       ),
       home: Scaffold(
-        body: ListView(children: [
-          Bahasa(),
-        ]),
+        body: ListView(
+          children: [
+            Bahasa(),
+          ],
+        ),
       ),
     );
   }
@@ -59,51 +62,68 @@ class _BahasaState extends State<Bahasa> {
                 left: 26,
                 top: 140,
                 child: buildLanguageContainer(
-                    'English (UK)', 'assets/icon/uk.png'),
+                    'English (UK)',
+                    'assets/icon/uk.png',
+                    'Language successfully changed to English (UK)'),
               ),
               Positioned(
                 left: 26,
                 top: 209,
                 child: buildLanguageContainer(
-                    'English (US)', 'assets/icon/us.png'),
+                    'English (US)',
+                    'assets/icon/us.png',
+                    'Language successfully changed to English (US)'),
               ),
               Positioned(
                 left: 26,
                 top: 278,
                 child: buildLanguageContainer(
-                    'Tagalog', 'assets/icon/tagalog.png'),
+                    'Tagalog',
+                    'assets/icon/tagalog.png',
+                    'Wika ay matagumpay na binago sa Tagalog'),
               ),
               Positioned(
                 left: 26,
                 top: 347,
                 child: buildLanguageContainer(
-                    'Bahasa Indonesia', 'assets/icon/indonesia.png'),
+                    'Bahasa Indonesia',
+                    'assets/icon/indonesia.png',
+                    'Bahasa berhasil diubah menjadi Bahasa Indonesia'),
               ),
               Positioned(
                 left: 26,
                 top: 416,
                 child: buildLanguageContainer(
-                    'Portuguese', 'assets/icon/portugal.png'),
+                    'Portuguese',
+                    'assets/icon/portugal.png',
+                    'Idioma alterado com sucesso para o Português'),
               ),
               Positioned(
                 left: 26,
                 top: 485,
-                child:
-                    buildLanguageContainer('Spanish', 'assets/icon/spain.png'),
+                child: buildLanguageContainer(
+                    'Español',
+                    'assets/icon/spain.png',
+                    'Idioma cambiado exitosamente a Español'),
               ),
               Positioned(
                 left: 26,
                 top: 554,
-                child:
-                    buildLanguageContainer('French', 'assets/icon/france.png'),
+                child: buildLanguageContainer(
+                    'Français',
+                    'assets/icon/france.png',
+                    'Langue changée avec succès en français'),
               ),
               Positioned(
                 left: 20,
                 top: 51,
                 child: GestureDetector(
                   onTap: () {
-                    // Handle cancel button press
-                    print('Cancel button pressed');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Userprofile()),
+                    );
                   },
                   child: const Text(
                     'Cancel',
@@ -124,11 +144,14 @@ class _BahasaState extends State<Bahasa> {
     );
   }
 
-  Widget buildLanguageContainer(String language, String flagImagePath) {
+  Widget buildLanguageContainer(
+      String language, String flagImagePath, String successMessage) {
     return GestureDetector(
       onTap: () {
         setState(() {
           selectedLanguage = language; // Update selected language
+          showLanguageChangeNotification(
+              context, successMessage); // Show notification
         });
       },
       child: Container(
@@ -163,6 +186,15 @@ class _BahasaState extends State<Bahasa> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void showLanguageChangeNotification(
+      BuildContext context, String successMessage) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(successMessage),
       ),
     );
   }

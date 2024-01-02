@@ -84,11 +84,14 @@ class _PostForumState extends State<PostForum> {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    // Tambahkan logika untuk menanggapi tombol "Cancel" di sini
-                    print('Cancel button tapped!');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ForumTernak()),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.transparent,
+                    backgroundColor: Colors.transparent,
                     shadowColor: Colors.transparent,
                     padding: EdgeInsets.zero,
                   ),

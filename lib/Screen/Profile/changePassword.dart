@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ikiternak_apps/Screen/Profile/profile.dart';
 
 void main() {
   runApp(const UbahPassword());
@@ -135,8 +136,11 @@ class _ChangePasswordState extends State<ChangePassword> {
                 top: 51,
                 child: GestureDetector(
                   onTap: () {
-                    // Handle cancel button tap
-                    print('Cancel button tapped');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Userprofile()),
+                    );
                   },
                   child: const Text(
                     'Cancel',
@@ -159,7 +163,6 @@ class _ChangePasswordState extends State<ChangePassword> {
                   child: ElevatedButton(
                     onPressed: () {
                       // Handle submit button tap
-                      // ignore: unused_local_variable
                       String currentPassword = currentPasswordController.text;
                       String newPassword = newPasswordController.text;
                       String confirmPassword = confirmPasswordController.text;
@@ -170,6 +173,9 @@ class _ChangePasswordState extends State<ChangePassword> {
                         setState(() {
                           isPasswordMismatch = false;
                         });
+
+                        // Show success dialog
+                        _showSuccessDialog(context);
                       } else {
                         // Passwords do not match, show error message
                         setState(() {
@@ -178,7 +184,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: const Color(0xFF50BE92),
+                      backgroundColor: const Color(0xFF50BE92),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -203,6 +209,33 @@ class _ChangePasswordState extends State<ChangePassword> {
           ),
         ),
       ],
+    );
+  }
+
+  // Function to show success dialog
+  Future<void> _showSuccessDialog(BuildContext context) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Password Updated'),
+          content: const Text('Your password has been successfully updated.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                // Close the dialog
+                Navigator.of(context).pop();
+                // Navigate to UserProfile
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Userprofile()),
+                );
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
     );
   }
 
