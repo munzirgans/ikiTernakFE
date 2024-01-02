@@ -30,7 +30,6 @@ class _RegistScreenState extends State<RegistScreen2> {
   final TextEditingController _addressController = TextEditingController();
 
   Future<void> registerUser() async {
-    // const String apiURL = "http://localhost:3000/auth/register";
     const String path = "/auth/register";
     String? apiURL = Env.apiURL! + path;
 

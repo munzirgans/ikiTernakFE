@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ikiternak_apps/Screen/TernakDiary/diaryTernak.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:ikiternak_apps/Screen/forum/forumTernak.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 //import 'buttomNavigationBar.dart';
 
@@ -12,7 +13,6 @@ void main() {
 class DashboardScreen extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
   const DashboardScreen({Key? key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

@@ -1,10 +1,16 @@
 // login_screen.dart
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ikiternak_apps/Screen/Homepage/dashboard_screen.dart';
+import 'package:ikiternak_apps/Screen/Layout/alert_dialog.dart';
+import 'package:ikiternak_apps/environtment.dart';
 import 'login_widgets.dart';
 import 'login_input.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -17,6 +23,36 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  Future<void> signIn(BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    const String path = '/auth/login';
+    String? apiURL = Env.apiURL! + path;
+    final Map<String, dynamic> data = {
+      'username': _usernameController.text,
+      'password': _passwordController.text,
+    };
+    try {
+      http
+          .post(Uri.parse(apiURL),
+              headers: {'Content-type': 'application/json'},
+              body: jsonEncode(data))
+          .then((response) {
+        var jsonResponse = jsonDecode(response.body);
+        if (response.statusCode == 200) {
+          var token = jsonResponse['jwtToken'];
+          prefs.setString('jwtToken', token);
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const DashboardScreen()));
+        } else {
+          AlertDialogWidget.showAlertDialog(
+              context, "Error", jsonResponse['message']);
+        }
+      });
+    } catch (error) {
+      AlertDialogWidget.showAlertDialog(context, "Error", error.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,11 +132,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 15),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const DashboardScreen()),
-                      );
+                      signIn(context);
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //       builder: (context) => const DashboardScreen()),
+                      // );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF50BE92),

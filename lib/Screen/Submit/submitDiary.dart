@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ikiternak_apps/Screen/TernakDiary/diaryTernak.dart';
+import 'package:ikiternak_apps/environtment.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(const submitDiary());
@@ -34,7 +36,11 @@ class _SubmitDiaryState extends State<SubmitDiary> {
 
   void onSubmitPressed() {
     // Implement your logic when the Submit button is pressed
-    print('Submit Pressed');
+    const String path = "/diaryternak";
+    String? apiURL = Env.apiURL! + path;
+    // final Map<String, dynamic> data = {
+    //   'harvest_date': selectedDate,
+    // }
   }
 
   void onCancelPressed() {
