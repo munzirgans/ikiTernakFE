@@ -68,8 +68,8 @@ class IncomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Income Screen')),
-      body: Center(child: Text('This is the Income Screen')),
+      appBar: AppBar(title: const Text('Income Screen')),
+      body: const Center(child: Text('This is the Income Screen')),
     );
   }
 }
@@ -78,8 +78,8 @@ class ExpenseScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Expense Screen')),
-      body: Center(child: Text('This is the Expense Screen')),
+      appBar: AppBar(title: const Text('Expense Screen')),
+      body: const Center(child: Text('This is the Expense Screen')),
     );
   }
 }
@@ -111,7 +111,7 @@ class SubmitDompet extends StatelessWidget {
           width: 390,
           height: 844,
           clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(color: Color(0xFFF7F7F7)),
+          decoration: const BoxDecoration(color: Color(0xFFF7F7F7)),
           child: Stack(
             children: [
               Positioned(
@@ -119,7 +119,7 @@ class SubmitDompet extends StatelessWidget {
                 top: 52,
                 child: GestureDetector(
                   onTap: onCancelPressed,
-                  child: Text(
+                  child: const Text(
                     'Cancel',
                     style: TextStyle(
                       color: Colors.black,
@@ -137,15 +137,16 @@ class SubmitDompet extends StatelessWidget {
                   width: 90,
                   height: 30,
                   decoration: ShapeDecoration(
-                    color: Color(0xFF50BE92),
+                    color: const Color(0xFF50BE92),
                     shape: RoundedRectangleBorder(
-                      side: BorderSide(width: 1, color: Color(0xFF73D5AE)),
+                      side:
+                          const BorderSide(width: 1, color: Color(0xFF73D5AE)),
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
                 ),
               ),
-              Positioned(
+              const Positioned(
                 left: 134,
                 top: 106,
                 child: Text(
@@ -167,13 +168,14 @@ class SubmitDompet extends StatelessWidget {
                   decoration: ShapeDecoration(
                     color: Colors.white,
                     shape: RoundedRectangleBorder(
-                      side: BorderSide(width: 1, color: Color(0xFFEBEBEB)),
+                      side:
+                          const BorderSide(width: 1, color: Color(0xFFEBEBEB)),
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
                 ),
               ),
-              Positioned(
+              const Positioned(
                 left: 233,
                 top: 106,
                 child: Text(
@@ -192,7 +194,7 @@ class SubmitDompet extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       'Date',
                       style: TextStyle(
                         color: Colors.black,
@@ -203,19 +205,19 @@ class SubmitDompet extends StatelessWidget {
                     ),
                     Container(
                       width: 270,
-                      margin: EdgeInsets.only(left: 55),
+                      margin: const EdgeInsets.only(left: 55),
                       child: GestureDetector(
                         onTap: () => _selectDate(context),
                         child: AbsorbPointer(
                           child: TextField(
-                            style: TextStyle(color: Colors.black),
+                            style: const TextStyle(color: Colors.black),
                             controller: TextEditingController(
                               text: selectedDate != null
                                   ? DateFormat('dd-MM-yyyy')
                                       .format(selectedDate!)
                                   : '',
                             ),
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               hintText: 'Enter Date',
                               hintStyle: TextStyle(color: Colors.grey),
                               enabledBorder: UnderlineInputBorder(
@@ -239,7 +241,7 @@ class SubmitDompet extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       'Amount',
                       style: TextStyle(
                         color: Colors.black,
@@ -250,16 +252,16 @@ class SubmitDompet extends StatelessWidget {
                     ),
                     Container(
                       width: 270,
-                      margin: EdgeInsets.only(left: 35),
+                      margin: const EdgeInsets.only(left: 35),
                       child: TextField(
-                        style: TextStyle(color: Colors.black),
+                        style: const TextStyle(color: Colors.black),
                         controller: amountController,
                         keyboardType: TextInputType.number,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
                           CurrencyInputFormatter(),
                         ],
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: 'Enter Amount',
                           hintStyle: TextStyle(color: Colors.grey),
                           enabledBorder: UnderlineInputBorder(
@@ -280,7 +282,7 @@ class SubmitDompet extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       'Category',
                       style: TextStyle(
                         color: Colors.black,
@@ -291,11 +293,11 @@ class SubmitDompet extends StatelessWidget {
                     ),
                     Container(
                       width: 270,
-                      margin: EdgeInsets.only(left: 30),
+                      margin: const EdgeInsets.only(left: 30),
                       child: TextField(
-                        style: TextStyle(color: Colors.black),
+                        style: const TextStyle(color: Colors.black),
                         controller: categoryController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: 'Enter Category',
                           hintStyle: TextStyle(color: Colors.grey),
                           enabledBorder: UnderlineInputBorder(
@@ -316,7 +318,7 @@ class SubmitDompet extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       'Description',
                       style: TextStyle(
                         color: Colors.black,
@@ -327,11 +329,11 @@ class SubmitDompet extends StatelessWidget {
                     ),
                     Container(
                       width: 270,
-                      margin: EdgeInsets.only(left: 15),
+                      margin: const EdgeInsets.only(left: 15),
                       child: TextField(
-                        style: TextStyle(color: Colors.black),
+                        style: const TextStyle(color: Colors.black),
                         controller: descriptionController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: 'Enter Description',
                           hintStyle: TextStyle(color: Colors.grey),
                           enabledBorder: UnderlineInputBorder(
@@ -352,7 +354,7 @@ class SubmitDompet extends StatelessWidget {
                 child: Column(
                   children: [
                     SubmitButton(onPressed: onSubmitPressed),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                   ],
                 ),
               ),
@@ -389,12 +391,12 @@ class SubmitButton extends StatelessWidget {
         width: 323,
         height: 39,
         decoration: ShapeDecoration(
-          color: Color(0xFF50BE92),
+          color: const Color(0xFF50BE92),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
           shadows: [
-            BoxShadow(
+            const BoxShadow(
               color: Color(0x26000000),
               blurRadius: 4,
               offset: Offset(0, 4),
@@ -402,7 +404,7 @@ class SubmitButton extends StatelessWidget {
             )
           ],
         ),
-        child: Center(
+        child: const Center(
           child: Text(
             'Submit',
             textAlign: TextAlign.center,

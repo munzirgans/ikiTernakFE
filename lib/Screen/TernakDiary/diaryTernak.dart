@@ -142,7 +142,7 @@ class _DiaryTernakState extends State<DiaryTernak> {
   }
 
   Widget buildDiaryTernakButton(String buttonText, bool isActive) {
-    return Container(
+    return SizedBox(
       width: 120,
       child: DiaryTernakButton(
         isActive: isActive,
@@ -459,6 +459,7 @@ Widget buildIconButton(String assetPath, VoidCallback onPressed) {
 void submit(BuildContext context) {
   Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) => submitDiary()), // Remove const here
+    MaterialPageRoute(
+        builder: (context) => const SubmitDiary()), // Remove const here
   );
 }

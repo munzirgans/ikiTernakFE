@@ -7,7 +7,8 @@ class DiaryTernakButton extends StatelessWidget {
   final String buttonText;
   final VoidCallback onPressed;
 
-  const DiaryTernakButton({super.key, 
+  const DiaryTernakButton({
+    super.key,
     required this.isActive,
     required this.buttonText,
     required this.onPressed,
