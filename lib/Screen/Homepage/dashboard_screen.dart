@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ikiternak_apps/Screen/TernakDiary/diaryTernak.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:ikiternak_apps/Screen/forum/forumTernak.dart';
 
 //import 'buttomNavigationBar.dart';
 
@@ -105,13 +106,13 @@ class _DashboardState extends State<Dashboard> {
             child: buildAmmoniaCard(),
           ),
           Positioned(
-            top: 340, // Ubah nilai top sesuai keinginan Anda
-            left: 25, // Ubah nilai left sesuai keinginan Anda
+            top: 340, // Adjust the top value according to your needs
+            left: 25, // Adjust the left value according to your needs
             child: buildFood(context),
           ),
           Positioned(
-            top: 340, // Ubah nilai top sesuai keinginan Anda
-            left: 200, // Ubah nilai left sesuai keinginan Anda
+            top: 340, // Adjust the top value according to your needs
+            left: 200, // Adjust the left value according to your needs
             child: buildWater(context),
           ),
           Positioned(
@@ -120,7 +121,9 @@ class _DashboardState extends State<Dashboard> {
             child: buildGrafik(context),
           ),
           Positioned(
-            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
             child: NavigationButtomBar(context),
           )
         ],
@@ -554,11 +557,11 @@ class _DashboardState extends State<Dashboard> {
           height: 192,
           child: LineChart(
             LineChartData(
-              gridData: FlGridData(show: false),
-              titlesData: FlTitlesData(show: false),
+              gridData: const FlGridData(show: false),
+              titlesData: const FlTitlesData(show: false),
               borderData: FlBorderData(
                 show: true,
-                border: Border(
+                border: const Border(
                   bottom: BorderSide(
                     color: Color(0xFFD8DCDA),
                     width: 1,
@@ -584,15 +587,15 @@ class _DashboardState extends State<Dashboard> {
               lineBarsData: [
                 LineChartBarData(
                   spots: [
-                    FlSpot(1, 20),
-                    FlSpot(2, 40),
-                    FlSpot(3, 60),
-                    FlSpot(4, 80),
-                    FlSpot(5, 40),
-                    FlSpot(6, 60),
+                    const FlSpot(1, 20),
+                    const FlSpot(2, 40),
+                    const FlSpot(3, 60),
+                    const FlSpot(4, 80),
+                    const FlSpot(5, 40),
+                    const FlSpot(6, 60),
                   ],
                   isCurved: true,
-                  color: Color(0xFF50BE92),
+                  color: const Color(0xFF50BE92),
                   barWidth: 2,
                   isStrokeCapRound: true,
                   belowBarData: BarAreaData(show: false),
@@ -643,17 +646,20 @@ class _DashboardState extends State<Dashboard> {
             ),
             IconButton(
               icon: Image.asset(
-                'assets/icon/profile_icon.png',
+                'assets/icon/forum_icon.png',
                 width: 25,
                 height: 35,
               ),
               onPressed: () {
-                // Handle forum button tap
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ForumTernak()),
+                );
               },
             ),
             IconButton(
               icon: Image.asset(
-                'assets/icon/forum_icon.png',
+                'assets/icon/profile_icon.png',
                 width: 25,
                 height: 35,
               ),
