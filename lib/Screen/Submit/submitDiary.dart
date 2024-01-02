@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ikiternak_apps/Screen/TernakDiary/diaryTernak.dart';
 import 'package:intl/intl.dart';
 
 void main() {
@@ -37,8 +38,11 @@ class _SubmitDiaryState extends State<SubmitDiary> {
   }
 
   void onCancelPressed() {
-    // Implement your logic when the Cancel button is pressed
-    print('Cancel Pressed');
+    // Navigate to DiaryTernak when Cancel button is pressed
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => DiaryTernak()),
+    );
   }
 
   @override
