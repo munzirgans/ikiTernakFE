@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ikiternak_apps/Screen/Profile/profile.dart';
 import 'package:intl/intl.dart';
 
 void main() {
@@ -15,9 +16,11 @@ class EditProfilePage extends StatelessWidget {
         scaffoldBackgroundColor: const Color.fromARGB(255, 18, 32, 47),
       ),
       home: Scaffold(
-        body: ListView(children: [
-          EditProfile(),
-        ]),
+        body: ListView(
+          children: [
+            EditProfile(),
+          ],
+        ),
       ),
     );
   }
@@ -333,6 +336,11 @@ class _EditProfileState extends State<EditProfile> {
                 child: GestureDetector(
                   onTap: () {
                     // Handle Submit button tap
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Userprofile()),
+                    );
                     print('Submit Pressed');
                     print('Name: ${nameController.text}');
                     print('Gender: $selectedGender');
@@ -368,6 +376,31 @@ class _EditProfileState extends State<EditProfile> {
                           height: 0,
                         ),
                       ),
+                    ),
+                  ),
+                ),
+              ),
+
+              // Cancel Button
+              Positioned(
+                left: 10,
+                top: 11,
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Userprofile()),
+                    );
+                  },
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w500,
+                      height: 0,
                     ),
                   ),
                 ),
