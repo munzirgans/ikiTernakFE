@@ -36,6 +36,10 @@ class _SubmitDiaryFormState extends State<SubmitDiaryForm> {
 
   void onSubmitPressed() {
     // Implement your logic when the Submit button is pressed
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => DiaryTernak()),
+    );
     print('Submit Pressed');
     print('Harvest Date: ${harvestDateController.text}');
     print('Quantity: ${quantityController.text}');
