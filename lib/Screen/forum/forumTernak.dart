@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:ikiternak_apps/Screen/Homepage/dashboard_screen.dart';
 import 'package:ikiternak_apps/Screen/Profile/profile.dart';
 import 'package:ikiternak_apps/Screen/TernakDiary/diaryTernak.dart';
-import 'package:ikiternak_apps/Screen/forum/postForum.dart';
 
 void main() {
   runApp(const ForumTernak());
@@ -49,6 +48,10 @@ class ForumTernak extends StatelessWidget {
               status:
                   'Ayam saya kebakar di dapur abis itu saya makan. Itu sebabnya kenapa ya?',
               initialReplyCount: 300,
+              userNameAlignment: CrossAxisAlignment.start,
+              locationAlignment: CrossAxisAlignment.end,
+              dateAlignment: CrossAxisAlignment.start,
+              statusAlignment: CrossAxisAlignment.center,
             ),
             ForumContent(
               userName: 'John Doe',
@@ -57,6 +60,10 @@ class ForumTernak extends StatelessWidget {
               status:
                   'I have a question about cattle breeding. Can anyone help me?',
               initialReplyCount: 50,
+              userNameAlignment: CrossAxisAlignment.start,
+              locationAlignment: CrossAxisAlignment.end,
+              dateAlignment: CrossAxisAlignment.start,
+              statusAlignment: CrossAxisAlignment.center,
             ),
             ForumContent(
               userName: 'Jane Doe',
@@ -64,6 +71,10 @@ class ForumTernak extends StatelessWidget {
               date: 'Mar 15, 2023',
               status: 'Looking for advice on poultry farming.',
               initialReplyCount: 120,
+              userNameAlignment: CrossAxisAlignment.start,
+              locationAlignment: CrossAxisAlignment.end,
+              dateAlignment: CrossAxisAlignment.start,
+              statusAlignment: CrossAxisAlignment.center,
             ),
             // Add more ForumContent widgets as needed...
           ],
@@ -80,6 +91,11 @@ class ForumContent extends StatefulWidget {
   final String date;
   final String status;
   final int initialReplyCount;
+  final CrossAxisAlignment userNameAlignment;
+  final CrossAxisAlignment locationAlignment;
+  final CrossAxisAlignment dateAlignment;
+  final CrossAxisAlignment statusAlignment;
+  final TextAlign textAlign;
 
   const ForumContent({
     Key? key,
@@ -88,6 +104,11 @@ class ForumContent extends StatefulWidget {
     required this.date,
     required this.status,
     required this.initialReplyCount,
+    this.userNameAlignment = CrossAxisAlignment.start,
+    this.locationAlignment = CrossAxisAlignment.start,
+    this.dateAlignment = CrossAxisAlignment.start,
+    this.statusAlignment = CrossAxisAlignment.start,
+    this.textAlign = TextAlign.start,
   }) : super(key: key);
 
   @override
@@ -120,52 +141,62 @@ class _ForumContentState extends State<ForumContent> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CircleAvatar(
-                radius: 20,
-                backgroundImage:
-                    const NetworkImage("https://via.placeholder.com/42x42"),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                widget.userName,
-                style: const TextStyle(
-                  color: Color(0xFF1B1B1B),
-                  fontSize: 13,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w600,
-                  height: -6.5,
-                ),
-              ),
-              Text(
-                widget.date,
-                style: const TextStyle(
-                  color: Color(0xFF759488),
-                  fontSize: 10,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w500,
-                  height: -9.5,
-                ),
-              ),
-              Text(
-                widget.location,
-                style: const TextStyle(
-                  color: Color(0xFF769589),
-                  fontSize: 10,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w500,
-                  height: -6.5,
-                ),
+              Row(
+                children: [
+                  CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Colors
+                        .transparent, // Add this line to make the background transparent
+                    child: ClipOval(
+                      child: Image.asset(
+                        "assets/images/avatar.png",
+                        width: 40,
+                        height: 40,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.userName,
+                        style: const TextStyle(
+                          color: Color(0xFF1B1B1B),
+                          fontSize: 13,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w600,
+                          height: 0,
+                        ),
+                      ),
+                      Text(
+                        widget.date,
+                        style: const TextStyle(
+                          color: Color(0xFF759488),
+                          fontSize: 10,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w500,
+                          height: 2,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
               SizedBox(
                 width: double.infinity,
-                child: Text(
-                  widget.status,
-                  style: const TextStyle(
-                    color: Color(0xFF1B1B1B),
-                    fontSize: 12,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w500,
-                    height: 1.5,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Text(
+                    widget.status,
+                    style: const TextStyle(
+                      color: Color(0xFF1B1B1B),
+                      fontSize: 12,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w500,
+                      height: 1.5,
+                    ),
                   ),
                 ),
               ),
@@ -353,12 +384,5 @@ Widget buildIconButton(String assetPath, VoidCallback onPressed) {
       height: 65,
     ),
     onPressed: onPressed,
-  );
-}
-
-void postForum(BuildContext context) {
-  Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => const PostForumApp()),
   );
 }
