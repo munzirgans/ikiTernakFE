@@ -1,5 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:ikiternak_apps/Screen/Layout/alert_dialog.dart';
+import 'package:ikiternak_apps/Screen/Profile/profile.dart';
+import 'package:ikiternak_apps/environtment.dart';
+import 'package:ikiternak_apps/main.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(const EditProfilePage());
@@ -35,6 +42,42 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController dobController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   DateTime? selectedDate;
+
+  void submitEditProfile() {
+    var token = prefs.getString('jwtToken');
+    const String path = '/users';
+    String? apiURL = Env.apiURL! + path;
+    final Map<String, dynamic> data = {
+      'name': nameController.text,
+      'gender': selectedGender,
+      'birthdate': dobController.text,
+      'email': emailController.text,
+    };
+    try {
+      http
+          .put(Uri.parse(apiURL),
+              headers: {
+                'Content-type': 'application/json',
+                'Authorization': 'Bearer $token'
+              },
+              body: jsonEncode(data))
+          .then((response) {
+        var jsonResponse = jsonDecode(response.body);
+        print(jsonResponse);
+        if (response.statusCode == 200) {
+          AlertDialogWidget.showAlertDialog(
+              context, "Successful", "Successfully update the data");
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const Userprofile()));
+        } else {
+          AlertDialogWidget.showAlertDialog(
+              context, "Error", jsonResponse['message']);
+        }
+      });
+    } catch (error) {
+      AlertDialogWidget.showAlertDialog(context, "Error", error.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -332,12 +375,7 @@ class _EditProfileState extends State<EditProfile> {
                 top: 727,
                 child: GestureDetector(
                   onTap: () {
-                    // Handle Submit button tap
-                    print('Submit Pressed');
-                    print('Name: ${nameController.text}');
-                    print('Gender: $selectedGender');
-                    print('Date of Birth: ${dobController.text}');
-                    print('Email: ${emailController.text}');
+                    submitEditProfile();
                   },
                   child: Container(
                     width: 323,

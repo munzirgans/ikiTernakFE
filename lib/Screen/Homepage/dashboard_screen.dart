@@ -4,6 +4,7 @@ import 'package:ikiternak_apps/Screen/TernakDiary/diaryTernak.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:ikiternak_apps/Screen/forum/forumTernak.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:math';
 
 //import 'buttomNavigationBar.dart';
 
@@ -48,11 +49,19 @@ class _DashboardState extends State<Dashboard> {
   }
 
   void simulateIoTData() {
+    Random random = Random();
     Future.delayed(Duration.zero, () {
       setState(() {
-        temperature = '26°C'; // Replace with actual IoT data
-        moistureValue = '50%'; // Replace with actual IoT data
-        ammoniaLevel = 'LIGHT'; // Replace with actual IoT data
+        final int minTemperature = 20;
+        final int maxTemperature = 30;
+        final List<String> ammoniaLevels = ['LOW', 'MEDIUM', 'HIGH'];
+
+        // Generate a random temperature within the specified range
+        final int randomTemperature = minTemperature +
+            random.nextInt(maxTemperature - minTemperature + 1);
+        temperature = '$randomTemperature°C'; // Replace with actual IoT data
+        moistureValue = '${(random.nextDouble() * 100).toStringAsFixed(2)}%';
+        ammoniaLevel = ammoniaLevels[random.nextInt(ammoniaLevels.length)];
       });
     });
   }
