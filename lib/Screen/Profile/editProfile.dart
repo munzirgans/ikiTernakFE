@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 void main() {
-  runApp(const editProfilePage());
+  runApp(const EditProfilePage());
 }
 
-class editProfilePage extends StatelessWidget {
-  const editProfilePage({Key? key});
+class EditProfilePage extends StatelessWidget {
+  const EditProfilePage({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,9 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   String selectedGender = '';
   List<String> genderOptions = ['Male', 'Female'];
+  TextEditingController nameController = TextEditingController();
   TextEditingController dobController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   DateTime? selectedDate;
 
   @override
@@ -145,11 +147,12 @@ class _EditProfileState extends State<EditProfile> {
                           borderRadius: BorderRadius.circular(10.0),
                           color: Colors.white,
                         ),
-                        child: const Padding(
-                          padding: EdgeInsets.all(10.0),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
                           child: TextField(
-                            style: TextStyle(color: Colors.black),
-                            decoration: InputDecoration(
+                            controller: nameController,
+                            style: const TextStyle(color: Colors.black),
+                            decoration: const InputDecoration(
                               border: InputBorder.none,
                             ),
                           ),
@@ -309,11 +312,12 @@ class _EditProfileState extends State<EditProfile> {
                           borderRadius: BorderRadius.circular(10.0),
                           color: Colors.white,
                         ),
-                        child: const Padding(
-                          padding: EdgeInsets.all(10.0),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
                           child: TextField(
-                            style: TextStyle(color: Colors.black),
-                            decoration: InputDecoration(
+                            controller: emailController,
+                            style: const TextStyle(color: Colors.black),
+                            decoration: const InputDecoration(
                               border: InputBorder.none,
                             ),
                           ),
@@ -330,6 +334,10 @@ class _EditProfileState extends State<EditProfile> {
                   onTap: () {
                     // Handle Submit button tap
                     print('Submit Pressed');
+                    print('Name: ${nameController.text}');
+                    print('Gender: $selectedGender');
+                    print('Date of Birth: ${dobController.text}');
+                    print('Email: ${emailController.text}');
                   },
                   child: Container(
                     width: 323,
