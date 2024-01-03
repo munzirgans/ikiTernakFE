@@ -1,5 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:ikiternak_apps/Screen/Layout/alert_dialog.dart';
+import 'package:ikiternak_apps/Screen/Profile/profile.dart';
+import 'package:ikiternak_apps/environtment.dart';
+import 'package:ikiternak_apps/main.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(const EditProfilePage());
@@ -15,9 +22,11 @@ class EditProfilePage extends StatelessWidget {
         scaffoldBackgroundColor: const Color.fromARGB(255, 18, 32, 47),
       ),
       home: Scaffold(
-        body: ListView(children: [
-          EditProfile(),
-        ]),
+        body: ListView(
+          children: [
+            EditProfile(),
+          ],
+        ),
       ),
     );
   }
@@ -35,6 +44,43 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController dobController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   DateTime? selectedDate;
+  String avatarImageAsset = "assets/images/avatar.png";
+
+  void submitEditProfile() {
+    var token = prefs.getString('jwtToken');
+    const String path = '/users';
+    String? apiURL = Env.apiURL! + path;
+    final Map<String, dynamic> data = {
+      'name': nameController.text,
+      'gender': selectedGender,
+      'birthdate': dobController.text,
+      'email': emailController.text,
+    };
+    try {
+      http
+          .put(Uri.parse(apiURL),
+              headers: {
+                'Content-type': 'application/json',
+                'Authorization': 'Bearer $token'
+              },
+              body: jsonEncode(data))
+          .then((response) {
+        var jsonResponse = jsonDecode(response.body);
+        print(jsonResponse);
+        if (response.statusCode == 200) {
+          AlertDialogWidget.showAlertDialog(
+              context, "Successful", "Successfully update the data");
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const Userprofile()));
+        } else {
+          AlertDialogWidget.showAlertDialog(
+              context, "Error", jsonResponse['message']);
+        }
+      });
+    } catch (error) {
+      AlertDialogWidget.showAlertDialog(context, "Error", error.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,8 +124,8 @@ class _EditProfileState extends State<EditProfile> {
                   width: 90,
                   height: 90,
                   decoration: ShapeDecoration(
-                    image: const DecorationImage(
-                      image: NetworkImage("https://via.placeholder.com/90x90"),
+                    image: DecorationImage(
+                      image: AssetImage(avatarImageAsset),
                       fit: BoxFit.fill,
                     ),
                     shape: RoundedRectangleBorder(
@@ -100,21 +146,6 @@ class _EditProfileState extends State<EditProfile> {
                     fontSize: 16,
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w600,
-                    height: 0,
-                  ),
-                ),
-              ),
-              const Positioned(
-                left: 167,
-                top: 253,
-                child: Text(
-                  'Edit Avatar',
-                  style: TextStyle(
-                    color: Color(0xFF1BA0E2),
-                    fontSize: 10,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w500,
-                    decoration: TextDecoration.underline,
                     height: 0,
                   ),
                 ),
@@ -332,12 +363,7 @@ class _EditProfileState extends State<EditProfile> {
                 top: 727,
                 child: GestureDetector(
                   onTap: () {
-                    // Handle Submit button tap
-                    print('Submit Pressed');
-                    print('Name: ${nameController.text}');
-                    print('Gender: $selectedGender');
-                    print('Date of Birth: ${dobController.text}');
-                    print('Email: ${emailController.text}');
+                    submitEditProfile();
                   },
                   child: Container(
                     width: 323,
@@ -368,6 +394,31 @@ class _EditProfileState extends State<EditProfile> {
                           height: 0,
                         ),
                       ),
+                    ),
+                  ),
+                ),
+              ),
+
+              // Cancel Button
+              Positioned(
+                left: 10,
+                top: 11,
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Userprofile()),
+                    );
+                  },
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w500,
+                      height: 0,
                     ),
                   ),
                 ),

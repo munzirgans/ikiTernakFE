@@ -1,8 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:ikiternak_apps/Screen/Homepage/dashboard_screen.dart';
 import 'package:ikiternak_apps/Screen/Profile/profile.dart';
 import 'package:ikiternak_apps/Screen/TernakDiary/diaryTernak.dart';
-import 'package:ikiternak_apps/Screen/forum/postForum.dart';
+import 'package:ikiternak_apps/environtment.dart';
+import 'package:ikiternak_apps/main.dart';
+import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(const ForumTernak());
@@ -10,6 +15,22 @@ void main() {
 
 class ForumTernak extends StatelessWidget {
   const ForumTernak({Key? key});
+  Future<List<Map<String, dynamic>>> loadPage() async {
+    await Future.delayed(const Duration(milliseconds: 800));
+    var token = prefs.getString('jwtToken');
+    const String path = '/forumternak';
+    String? apiURL = Env.apiURL! + path;
+    var response = await http.get(
+      Uri.parse(apiURL),
+      headers: {
+        'Content-type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+    );
+    List<Map<String, dynamic>> result =
+        List<Map<String, dynamic>>.from(jsonDecode(response.body));
+    return result;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,56 +39,187 @@ class ForumTernak extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFFF8F8F8),
       ),
       home: Scaffold(
-        body: ListView(
-          children: const [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                    vertical: 4.0,
-                  ),
-                  child: Text(
-                    'Forum Ternak',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w500,
-                      height: 7,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            ForumContent(
-              userName: 'Anggiat Maharasi',
-              location: 'Siborongborong, Sumatera Utara',
-              date: 'Feb 06, 2023',
-              status:
-                  'Ayam saya kebakar di dapur abis itu saya makan. Itu sebabnya kenapa ya?',
-              initialReplyCount: 300,
-            ),
-            ForumContent(
-              userName: 'John Doe',
-              location: 'City X, State Y',
-              date: 'Jan 01, 2023',
-              status:
-                  'I have a question about cattle breeding. Can anyone help me?',
-              initialReplyCount: 50,
-            ),
-            ForumContent(
-              userName: 'Jane Doe',
-              location: 'City Z, State W',
-              date: 'Mar 15, 2023',
-              status: 'Looking for advice on poultry farming.',
-              initialReplyCount: 120,
-            ),
-            // Add more ForumContent widgets as needed...
-          ],
+        body: FutureBuilder<List<Map<String, dynamic>>>(
+          future: loadPage(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (snapshot.hasData) {
+              List<Map<String, dynamic>> forumData = snapshot.data!;
+              return ListView.builder(
+                  itemCount: forumData.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index == 0) {
+                      return const Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                              vertical: 4.0,
+                            ),
+                            child: Text(
+                              'Forum Ternak',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w500,
+                                height: 7,
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    } else {
+                      Map<String, dynamic> data = forumData[index - 1];
+                      DateTime dateFormat = DateTime.parse(data['createdAt']);
+                      String formatDate =
+                          DateFormat("MMM dd, yyyy").format(dateFormat);
+                      return ForumContent(
+                        userName: data['user']['name'],
+                        location: "TEST",
+                        date: formatDate,
+                        status: data['description'],
+                        initialReplyCount: 0,
+                        userNameAlignment: CrossAxisAlignment.start,
+                        locationAlignment: CrossAxisAlignment.end,
+                        dateAlignment: CrossAxisAlignment.start,
+                        statusAlignment: CrossAxisAlignment.center,
+                      );
+                    }
+                  }
+                  // children: const [
+                  //   Column(
+                  //     crossAxisAlignment: CrossAxisAlignment.start,
+                  //     children: [
+                  //       Padding(
+                  //         padding: EdgeInsets.symmetric(
+                  //           horizontal: 16.0,
+                  //           vertical: 4.0,
+                  //         ),
+                  //         child: Text(
+                  //           'Forum Ternak',
+                  //           textAlign: TextAlign.center,
+                  //           style: TextStyle(
+                  //             color: Colors.black,
+                  //             fontSize: 18,
+                  //             fontFamily: 'Poppins',
+                  //             fontWeight: FontWeight.w500,
+                  //             height: 7,
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  //   ForumContent(
+                  //     userName: 'Anggiat Maharasi',
+                  //     location: 'Siborongborong, Sumatera Utara',
+                  //     date: 'Feb 06, 2023',
+                  //     status:
+                  //         'Ayam saya kebakar di dapur abis itu saya makan. Itu sebabnya kenapa ya?',
+                  //     initialReplyCount: 300,
+                  //     userNameAlignment: CrossAxisAlignment.start,
+                  //     locationAlignment: CrossAxisAlignment.end,
+                  //     dateAlignment: CrossAxisAlignment.start,
+                  //     statusAlignment: CrossAxisAlignment.center,
+                  //   ),
+                  //   ForumContent(
+                  //     userName: 'John Doe',
+                  //     location: 'City X, State Y',
+                  //     date: 'Jan 01, 2023',
+                  //     status:
+                  //         'I have a question about cattle breeding. Can anyone help me?',
+                  //     initialReplyCount: 50,
+                  //     userNameAlignment: CrossAxisAlignment.start,
+                  //     locationAlignment: CrossAxisAlignment.end,
+                  //     dateAlignment: CrossAxisAlignment.start,
+                  //     statusAlignment: CrossAxisAlignment.center,
+                  //   ),
+                  //   ForumContent(
+                  //     userName: 'Jane Doe',
+                  //     location: 'City Z, State W',
+                  //     date: 'Mar 15, 2023',
+                  //     status: 'Looking for advice on poultry farming.',
+                  //     initialReplyCount: 120,
+                  //     userNameAlignment: CrossAxisAlignment.start,
+                  //     locationAlignment: CrossAxisAlignment.end,
+                  //     dateAlignment: CrossAxisAlignment.start,
+                  //     statusAlignment: CrossAxisAlignment.center,
+                  //   ),
+                  //   // Add more ForumContent widgets as needed...
+                  // ],
+                  );
+            } else {
+              return const Center(child: Text('No data available'));
+            }
+          },
         ),
+        // body: ListView(
+        //   children: const [
+        //     Column(
+        //       crossAxisAlignment: CrossAxisAlignment.start,
+        //       children: [
+        //         Padding(
+        //           padding: EdgeInsets.symmetric(
+        //             horizontal: 16.0,
+        //             vertical: 4.0,
+        //           ),
+        //           child: Text(
+        //             'Forum Ternak',
+        //             textAlign: TextAlign.center,
+        //             style: TextStyle(
+        //               color: Colors.black,
+        //               fontSize: 18,
+        //               fontFamily: 'Poppins',
+        //               fontWeight: FontWeight.w500,
+        //               height: 7,
+        //             ),
+        //           ),
+        //         ),
+        //       ],
+        //     ),
+        //     ForumContent(
+        //       userName: 'Anggiat Maharasi',
+        //       location: 'Siborongborong, Sumatera Utara',
+        //       date: 'Feb 06, 2023',
+        //       status:
+        //           'Ayam saya kebakar di dapur abis itu saya makan. Itu sebabnya kenapa ya?',
+        //       initialReplyCount: 300,
+        //       userNameAlignment: CrossAxisAlignment.start,
+        //       locationAlignment: CrossAxisAlignment.end,
+        //       dateAlignment: CrossAxisAlignment.start,
+        //       statusAlignment: CrossAxisAlignment.center,
+        //     ),
+        //     ForumContent(
+        //       userName: 'John Doe',
+        //       location: 'City X, State Y',
+        //       date: 'Jan 01, 2023',
+        //       status:
+        //           'I have a question about cattle breeding. Can anyone help me?',
+        //       initialReplyCount: 50,
+        //       userNameAlignment: CrossAxisAlignment.start,
+        //       locationAlignment: CrossAxisAlignment.end,
+        //       dateAlignment: CrossAxisAlignment.start,
+        //       statusAlignment: CrossAxisAlignment.center,
+        //     ),
+        //     ForumContent(
+        //       userName: 'Jane Doe',
+        //       location: 'City Z, State W',
+        //       date: 'Mar 15, 2023',
+        //       status: 'Looking for advice on poultry farming.',
+        //       initialReplyCount: 120,
+        //       userNameAlignment: CrossAxisAlignment.start,
+        //       locationAlignment: CrossAxisAlignment.end,
+        //       dateAlignment: CrossAxisAlignment.start,
+        //       statusAlignment: CrossAxisAlignment.center,
+        //     ),
+        //     // Add more ForumContent widgets as needed...
+        //   ],
+        // ),
         bottomNavigationBar: NavigationBottomBar(),
       ),
     );
@@ -80,6 +232,11 @@ class ForumContent extends StatefulWidget {
   final String date;
   final String status;
   final int initialReplyCount;
+  final CrossAxisAlignment userNameAlignment;
+  final CrossAxisAlignment locationAlignment;
+  final CrossAxisAlignment dateAlignment;
+  final CrossAxisAlignment statusAlignment;
+  final TextAlign textAlign;
 
   const ForumContent({
     Key? key,
@@ -88,6 +245,11 @@ class ForumContent extends StatefulWidget {
     required this.date,
     required this.status,
     required this.initialReplyCount,
+    this.userNameAlignment = CrossAxisAlignment.start,
+    this.locationAlignment = CrossAxisAlignment.start,
+    this.dateAlignment = CrossAxisAlignment.start,
+    this.statusAlignment = CrossAxisAlignment.start,
+    this.textAlign = TextAlign.start,
   }) : super(key: key);
 
   @override
@@ -120,52 +282,62 @@ class _ForumContentState extends State<ForumContent> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CircleAvatar(
-                radius: 20,
-                backgroundImage:
-                    const NetworkImage("https://via.placeholder.com/42x42"),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                widget.userName,
-                style: const TextStyle(
-                  color: Color(0xFF1B1B1B),
-                  fontSize: 13,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w600,
-                  height: -6.5,
-                ),
-              ),
-              Text(
-                widget.date,
-                style: const TextStyle(
-                  color: Color(0xFF759488),
-                  fontSize: 10,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w500,
-                  height: -9.5,
-                ),
-              ),
-              Text(
-                widget.location,
-                style: const TextStyle(
-                  color: Color(0xFF769589),
-                  fontSize: 10,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w500,
-                  height: -6.5,
-                ),
+              Row(
+                children: [
+                  CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Colors
+                        .transparent, // Add this line to make the background transparent
+                    child: ClipOval(
+                      child: Image.asset(
+                        "assets/images/avatar.png",
+                        width: 40,
+                        height: 40,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.userName,
+                        style: const TextStyle(
+                          color: Color(0xFF1B1B1B),
+                          fontSize: 13,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w600,
+                          height: 0,
+                        ),
+                      ),
+                      Text(
+                        widget.date,
+                        style: const TextStyle(
+                          color: Color(0xFF759488),
+                          fontSize: 10,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w500,
+                          height: 2,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
               SizedBox(
                 width: double.infinity,
-                child: Text(
-                  widget.status,
-                  style: const TextStyle(
-                    color: Color(0xFF1B1B1B),
-                    fontSize: 12,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w500,
-                    height: 1.5,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Text(
+                    widget.status,
+                    style: const TextStyle(
+                      color: Color(0xFF1B1B1B),
+                      fontSize: 12,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w500,
+                      height: 1.5,
+                    ),
                   ),
                 ),
               ),
@@ -353,12 +525,5 @@ Widget buildIconButton(String assetPath, VoidCallback onPressed) {
       height: 65,
     ),
     onPressed: onPressed,
-  );
-}
-
-void postForum(BuildContext context) {
-  Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => const PostForumApp()),
   );
 }

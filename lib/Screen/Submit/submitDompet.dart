@@ -19,6 +19,7 @@ class _submitDompetState extends State<submitDompet> {
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _categoryController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +36,7 @@ class _submitDompetState extends State<submitDompet> {
               amountController: _amountController,
               categoryController: _categoryController,
               descriptionController: _descriptionController,
+              titleController: _titleController,
               onCancelPressed: () {
                 // Navigate to DompetTernak screen when Cancel button is pressed
                 Navigator.pushReplacement(
@@ -43,11 +45,16 @@ class _submitDompetState extends State<submitDompet> {
                 );
               },
               onSubmitPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DompetTernak()),
+                );
                 // Tambahkan aksi untuk tombol Submit di sini
                 print('Submit Pressed');
                 print('Date: ${selectedDate.toString()}');
                 print('Amount: ${_amountController.text}');
                 print('Category: ${_categoryController.text}');
+                print('Title: ${_titleController}');
                 print('Description: ${_descriptionController.text}');
               },
             ),
@@ -90,6 +97,7 @@ class SubmitDompet extends StatelessWidget {
   final TextEditingController amountController;
   final TextEditingController categoryController;
   final TextEditingController descriptionController;
+  final TextEditingController titleController;
   final VoidCallback? onCancelPressed;
   final VoidCallback? onSubmitPressed;
 
@@ -99,6 +107,7 @@ class SubmitDompet extends StatelessWidget {
     required this.amountController,
     required this.categoryController,
     required this.descriptionController,
+    required this.titleController,
     this.onCancelPressed,
     this.onSubmitPressed,
   });
@@ -319,6 +328,41 @@ class SubmitDompet extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const Text(
+                      'Title',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 12,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    Container(
+                      width: 270,
+                      margin: const EdgeInsets.only(left: 55),
+                      child: TextField(
+                        style: const TextStyle(color: Colors.black),
+                        decoration: const InputDecoration(
+                          hintText: 'Enter Title',
+                          hintStyle: TextStyle(color: Colors.grey),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Positioned(
+                left: 22,
+                top: 316,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text(
                       'Description',
                       style: TextStyle(
                         color: Colors.black,
@@ -386,7 +430,12 @@ class SubmitButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onPressed,
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => DompetTernak()),
+        );
+      },
       child: Container(
         width: 323,
         height: 39,

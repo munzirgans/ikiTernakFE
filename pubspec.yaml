@@ -32,6 +32,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   fl_chart: ^0.65.0
   intl: ^0.17.0
+  image_picker: ^0.8.0
 
   flutter:
     sdk: flutter
@@ -42,6 +43,8 @@ dependencies:
   flutter_facebook_auth: ^4.0.0
   google_sign_in: ^6.2.1
   flutter_dotenv: ^5.1.0
+  jwt_decoder: ^2.0.1
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   # The "flutter_lints" package below contains a set of recommended lints to

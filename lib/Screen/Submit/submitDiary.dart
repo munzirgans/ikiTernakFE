@@ -1,6 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:ikiternak_apps/Screen/Layout/alert_dialog.dart';
 import 'package:ikiternak_apps/Screen/TernakDiary/diaryTernak.dart';
+import 'package:ikiternak_apps/environtment.dart';
+import 'package:ikiternak_apps/main.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(const SubmitDiary());
@@ -35,10 +41,34 @@ class _SubmitDiaryFormState extends State<SubmitDiaryForm> {
   TextEditingController quantityController = TextEditingController();
 
   void onSubmitPressed() {
-    // Implement your logic when the Submit button is pressed
-    print('Submit Pressed');
-    print('Harvest Date: ${harvestDateController.text}');
-    print('Quantity: ${quantityController.text}');
+    String? token = prefs.getString('jwtToken');
+    const String path = '/diaryternak/diary';
+    String? apiURL = Env.apiURL! + path;
+    final Map<String, dynamic> data = {
+      'harvest_date': harvestDateController.text,
+      'quantity': quantityController.text,
+    };
+    try {
+      http
+          .post(Uri.parse(apiURL),
+              headers: {
+                'Content-type': 'application/json',
+                'Authorization': 'Bearer $token'
+              },
+              body: jsonEncode(data))
+          .then((response) {
+        var jsonResponse = jsonDecode(response.body);
+        if (response.statusCode == 200) {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => DiaryTernak()));
+        } else {
+          AlertDialogWidget.showAlertDialog(
+              context, "Error", jsonResponse['message']);
+        }
+      });
+    } catch (error) {
+      AlertDialogWidget.showAlertDialog(context, "Error", error.toString());
+    }
   }
 
   void onCancelPressed() {

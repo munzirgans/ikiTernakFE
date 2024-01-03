@@ -1,6 +1,7 @@
 // login_widgets.dart
 
 import 'dart:convert';
+// import 'dart:js_util';
 // import 'dart:js';
 
 import 'package:flutter/material.dart';
@@ -13,8 +14,10 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:ikiternak_apps/api/google_signin_api.dart';
 import 'package:ikiternak_apps/environtment.dart';
 import 'package:http/http.dart' as http;
+import 'package:ikiternak_apps/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-Future signIn(BuildContext context) async {
+Future signInGoogle(BuildContext context, SharedPreferences prefs) async {
   final user = await GoogleSignInAPI.login();
   const String path = "/auth/login";
   String? apiURL = Env.apiURL! + path;
@@ -31,6 +34,8 @@ Future signIn(BuildContext context) async {
         .then((response) {
       var jsonResponse = jsonDecode(response.body);
       if (response.statusCode == 200) {
+        var token = jsonResponse['jwtToken'];
+        prefs.setString('jwtToken', token);
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const DashboardScreen()),
@@ -43,7 +48,6 @@ Future signIn(BuildContext context) async {
   } catch (error) {
     print('Error: $error');
   }
-  // final Map<String, dynamic> data =
 }
 
 Widget buildLogo() {
@@ -97,7 +101,7 @@ Widget buildSignUpText(BuildContext context) {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => RegistScreen()),
+            MaterialPageRoute(builder: (context) => const RegistScreen()),
           );
         },
         child: RichText(
@@ -154,15 +158,15 @@ Widget buildLoginWithText(BuildContext context) {
             children: <Widget>[
               GestureDetector(
                 onTap: () async {
-                  await facebookHandle(context);
+                  await facebookHandle(context, prefs);
                 },
                 child: Image.asset('assets/icon/facebook_icon.png', height: 30),
               ),
               const SizedBox(width: 10),
               GestureDetector(
-                onTap: () {
+                onTap: () async {
                   // Handle Google login
-                  signIn(context);
+                  await signInGoogle(context, prefs);
                 },
                 child: Image.asset('assets/icon/google_icon.png', height: 30),
               ),
@@ -174,7 +178,8 @@ Widget buildLoginWithText(BuildContext context) {
   );
 }
 
-Future<void> facebookHandle(BuildContext context) async {
+Future<void> facebookHandle(
+    BuildContext context, SharedPreferences prefs) async {
   Map<String, dynamic>? userData = {};
   FacebookAuth.instance
       .login(permissions: ["public_profile", "email"]).then((value) {
@@ -196,6 +201,8 @@ Future<void> facebookHandle(BuildContext context) async {
               .then((response) {
             var jsonResponse = jsonDecode(response.body);
             if (response.statusCode == 200) {
+              var token = jsonResponse['jwtToken'];
+              prefs.setString("jwtToken", token);
               Navigator.push(
                 context,
                 MaterialPageRoute(
