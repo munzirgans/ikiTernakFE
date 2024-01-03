@@ -81,20 +81,6 @@ class ForumTernak extends StatelessWidget {
           ],
         ),
         bottomNavigationBar: NavigationBottomBar(),
-        floatingActionButton: Positioned(
-          bottom: 20,
-          right: 16,
-          child: IconButton(
-            icon: Image.asset(
-              'assets/icon/add.png',
-              width: 50,
-              height: 50,
-            ),
-            onPressed: () {
-              submit(context);
-            },
-          ),
-        ),
       ),
     );
   }
@@ -231,6 +217,14 @@ class _ForumContentState extends State<ForumContent> {
                 indent: 12,
                 endIndent: 12,
                 height: 20,
+              ),
+              Positioned(
+                bottom: 20,
+                right: 16,
+                child: buildIconButton('assets/icon/add.png', () {
+                  submit(
+                      context); // Call the submitDompett function with context
+                }),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -392,17 +386,13 @@ class NavigationBottomBar extends StatelessWidget {
 }
 
 Widget buildIconButton(String assetPath, VoidCallback onPressed) {
-  return Positioned(
-    bottom: 20,
-    right: 16,
-    child: IconButton(
-      icon: Image.asset(
-        assetPath,
-        width: 70,
-        height: 65,
-      ),
-      onPressed: onPressed,
+  return IconButton(
+    icon: Image.asset(
+      assetPath,
+      width: 70,
+      height: 65,
     ),
+    onPressed: onPressed,
   );
 }
 
@@ -410,7 +400,6 @@ void submit(BuildContext context) {
   Navigator.push(
     context,
     MaterialPageRoute(
-      builder: (context) => const PostForumApp(),
-    ),
+        builder: (context) => const PostForum()), // Remove const here
   );
 }

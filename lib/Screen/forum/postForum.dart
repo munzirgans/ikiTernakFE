@@ -91,8 +91,7 @@ class _PostForumState extends State<PostForum> {
                     height: 42,
                     decoration: const ShapeDecoration(
                       image: DecorationImage(
-                        image:
-                            NetworkImage("https://via.placeholder.com/42x42"),
+                        image: AssetImage("assets/images/avatar.png"),
                         fit: BoxFit.fill,
                       ),
                       shape: CircleBorder(),
@@ -105,6 +104,12 @@ class _PostForumState extends State<PostForum> {
                   child: GestureDetector(
                     onTap: () {
                       // Tambahkan logika untuk menanggapi tombol "Post" di sini
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ForumTernak(),
+                        ),
+                      );
                       print('Post button tapped!');
                     },
                     child: Container(
