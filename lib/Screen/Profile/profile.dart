@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ikiternak_apps/Screen/Homepage/dashboard_screen.dart';
+import 'package:ikiternak_apps/Screen/Login/login_screen.dart';
 import 'package:ikiternak_apps/Screen/Profile/UbahBahasa.dart';
 import 'package:ikiternak_apps/Screen/Profile/changePassword.dart';
 import 'package:ikiternak_apps/Screen/Profile/editProfile.dart';
@@ -419,6 +420,7 @@ class Logout extends StatelessWidget {
                           onTap: () {
                             // Fungsi yang akan dipanggil saat teks "Log Out" ditekan
                             print('Log Out Tapped');
+                            _showLogoutDialog(context);
                           },
                           child: SizedBox(
                             width: 79,
@@ -530,6 +532,38 @@ class Logout extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmation'),
+          content: Text('Are you sure you want to log out?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('No'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+                // Add logic to perform logout here
+                print('User logged out');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                );
+              },
+              child: Text('Yes'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
