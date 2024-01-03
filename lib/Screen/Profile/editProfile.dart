@@ -22,9 +22,11 @@ class EditProfilePage extends StatelessWidget {
         scaffoldBackgroundColor: const Color.fromARGB(255, 18, 32, 47),
       ),
       home: Scaffold(
-        body: ListView(children: [
-          EditProfile(),
-        ]),
+        body: ListView(
+          children: [
+            EditProfile(),
+          ],
+        ),
       ),
     );
   }
@@ -42,6 +44,8 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController dobController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   DateTime? selectedDate;
+  String avatarImageUrl =
+      "https://via.placeholder.com/90x90"; // Default avatar image URL
 
   void submitEditProfile() {
     var token = prefs.getString('jwtToken');
@@ -121,8 +125,8 @@ class _EditProfileState extends State<EditProfile> {
                   width: 90,
                   height: 90,
                   decoration: ShapeDecoration(
-                    image: const DecorationImage(
-                      image: NetworkImage("https://via.placeholder.com/90x90"),
+                    image: DecorationImage(
+                      image: NetworkImage(avatarImageUrl),
                       fit: BoxFit.fill,
                     ),
                     shape: RoundedRectangleBorder(
@@ -147,21 +151,21 @@ class _EditProfileState extends State<EditProfile> {
                   ),
                 ),
               ),
-              const Positioned(
-                left: 167,
-                top: 253,
-                child: Text(
-                  'Edit Avatar',
-                  style: TextStyle(
-                    color: Color(0xFF1BA0E2),
-                    fontSize: 10,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w500,
-                    decoration: TextDecoration.underline,
-                    height: 0,
-                  ),
-                ),
-              ),
+              // Positioned(
+              //   left: 167,
+              //   top: 253,
+              //   child: Text(
+              //     'Edit Avatar',
+              //     style: TextStyle(
+              //       color: Color(0xFF1BA0E2),
+              //       fontSize: 10,
+              //       fontFamily: 'Poppins',
+              //       fontWeight: FontWeight.w500,
+              //       decoration: TextDecoration.underline,
+              //       height: 0,
+              //     ),
+              //   ),
+              // ),
               Positioned(
                 left: 34,
                 top: 297,
@@ -406,6 +410,31 @@ class _EditProfileState extends State<EditProfile> {
                           height: 0,
                         ),
                       ),
+                    ),
+                  ),
+                ),
+              ),
+
+              // Cancel Button
+              Positioned(
+                left: 10,
+                top: 11,
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Userprofile()),
+                    );
+                  },
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w500,
+                      height: 0,
                     ),
                   ),
                 ),
