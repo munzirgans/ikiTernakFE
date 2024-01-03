@@ -96,7 +96,7 @@ class Logout extends StatelessWidget {
                             height: 55,
                             decoration: ShapeDecoration(
                               image: const DecorationImage(
-                                image: AssetImage('assets/icon/muns.png'),
+                                image: AssetImage('assets/images/avatar.png'),
                                 fit: BoxFit.fill,
                               ),
                               shape: RoundedRectangleBorder(
