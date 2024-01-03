@@ -13,15 +13,7 @@ void main() {
 }
 
 class ReportData {
-  final String reportDate;
-  final String harvestDate;
-  final int eggsTotal;
-
-  ReportData({
-    required this.reportDate,
-    required this.harvestDate,
-    required this.eggsTotal,
-  });
+  ReportData();
 }
 
 class DompetTernak extends StatefulWidget {
@@ -33,23 +25,8 @@ class _DompetTernakState extends State<DompetTernak> {
   bool isDiaryTernakActive = false;
   bool isDompetTernakActive = true;
 
-  List<ReportData> reportDataList = [
-    ReportData(
-      reportDate: 'Monday, 22 December 2022',
-      harvestDate: 'Saturday, 19 December 2022',
-      eggsTotal: 25,
-    ),
-    ReportData(
-      reportDate: 'Tuesday, 23 December 2022',
-      harvestDate: 'Sunday, 20 December 2022',
-      eggsTotal: 30,
-    ),
-    ReportData(
-      reportDate: 'Wednesday, 24 December 2022',
-      harvestDate: 'Monday, 21 December 2022',
-      eggsTotal: 35,
-    ),
-  ];
+  DateTime fromDate = DateTime.now(); // Tanggal awal
+  DateTime toDate = DateTime.now(); // Tanggal akhir
 
   @override
   Widget build(BuildContext context) {
@@ -89,28 +66,16 @@ class _DompetTernakState extends State<DompetTernak> {
                       ],
                     ),
                     const SizedBox(height: 20),
-                    // buildGrafik(context),
                     const SizedBox(height: 200),
                     Expanded(
                       child: ListView.builder(
-                        itemCount: reportDataList.length + 5,
+                        itemCount:
+                            3 + 5, // Changed to a fixed number for simplicity
                         itemBuilder: (context, index) {
-                          if (index < reportDataList.length) {
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 20),
-                              child: buildReportCard(reportDataList[index]),
-                            );
-                          } else {
-                            ReportData placeholderData = ReportData(
-                              reportDate: 'Placeholder Date',
-                              harvestDate: 'Placeholder Harvest Date',
-                              eggsTotal: 0,
-                            );
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 20),
-                              child: buildReportCard(placeholderData),
-                            );
-                          }
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 20),
+                            child: buildReportCard(),
+                          );
                         },
                       ),
                     ),
@@ -126,6 +91,31 @@ class _DompetTernakState extends State<DompetTernak> {
                     context); // Call the submitDompett function with context
               }),
             ),
+            Positioned(
+              top: 160,
+              left: 0,
+              right: 250,
+              child: buildThisMonth(context),
+            ),
+            transaction(context),
+            Positioned(
+              top: 180,
+              left: 0,
+              right: 160,
+              child: buildIncome(context),
+            ),
+            Positioned(
+              top: 180,
+              left: 160,
+              right: 0,
+              child: buildExpense(context),
+            ),
+            Positioned(
+              top: 260,
+              left: 0,
+              right: 250,
+              child: buildRecently(context),
+            )
           ],
         ),
         bottomNavigationBar: NavigationButtomBar(),
@@ -155,172 +145,261 @@ class _DompetTernakState extends State<DompetTernak> {
     );
   }
 
-  // Hapus kode grafik
+  Widget transaction(BuildContext context) {
+    return const Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.only(left: 45, right: 16, top: 80),
+          child: Text(
+            'Transaction History',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 18,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w500,
+              height: 0,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
 
-  Widget buildReportCard(ReportData reportData) {
-    return Container(
-      width: 339,
-      height: 99,
-      decoration: ShapeDecoration(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
-          side: const BorderSide(width: 1, color: Color(0xFFEBEBEB)),
-          borderRadius: BorderRadius.circular(10),
+Widget buildThisMonth(BuildContext context) {
+  return const Column(
+    children: [
+      Text(
+        'This Month',
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 12,
+          fontFamily: 'Poppins',
+          fontWeight: FontWeight.w400,
+          height: 0,
         ),
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 24,
-            height: 24,
-            clipBehavior: Clip.antiAlias,
-            decoration: const BoxDecoration(),
-            child: Stack(
+    ],
+  );
+}
+
+Widget buildIncome(BuildContext context) {
+  return Column(
+    children: [
+      Container(
+        width: 140,
+        height: 65,
+        decoration: ShapeDecoration(
+          color: const Color(0xFF73D5AE),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          shadows: [
+            const BoxShadow(
+              color: Color(0x19000000),
+              blurRadius: 5,
+              offset: Offset(3, 3),
+              spreadRadius: 0,
+            )
+          ],
+        ),
+        child: const Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Income',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 12,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w600,
+                height: -1,
+              ),
+            ),
+            Text(
+              'Rp. 1.078.350,-',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w600,
+                height: 2,
+              ),
+            ),
+          ],
+        ),
+      ),
+    ],
+  );
+}
+
+Widget buildExpense(BuildContext context) {
+  return Column(
+    children: [
+      Container(
+        width: 140,
+        height: 65,
+        decoration: ShapeDecoration(
+          color: const Color(0xFFED4C5C),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          shadows: [
+            const BoxShadow(
+              color: Color(0x19000000),
+              blurRadius: 5,
+              offset: Offset(3, 3),
+              spreadRadius: 0,
+            )
+          ],
+        ),
+        child: const Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Expense',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 12,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w600,
+                height: -1,
+              ),
+            ),
+            Text(
+              'Rp. 8.090.000,-',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w600,
+                height: 2,
+              ),
+            ),
+          ],
+        ),
+      ),
+    ],
+  );
+}
+
+Widget buildRecently(BuildContext context) {
+  return const Column(
+    children: [
+      Text(
+        'Recently',
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 12,
+          fontFamily: 'Poppins',
+          fontWeight: FontWeight.w400,
+          height: 0,
+        ),
+      ),
+    ],
+  );
+}
+
+Widget buildReportCard() {
+  return Container(
+    width: 339,
+    height: 100,
+    decoration: ShapeDecoration(
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        side: const BorderSide(width: 1, color: Color(0xFFEBEBEB)),
+        borderRadius: BorderRadius.circular(10),
+      ),
+    ),
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 35,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Pembelian Telur',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w600,
+                      height: 3,
+                    ),
+                  ),
+                  Text(
+                    getFormattedDate('22 December 2022'), // Example date
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 10,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w500,
+                      height: -1,
+                    ),
+                  ),
+                  const Text(
+                    'Pembelian telur ayam sebanyak...',
+                    style: TextStyle(
+                      color: Color(0xFF9F9F9F),
+                      fontSize: 10,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w500,
+                      height: 6,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        const Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(width: 35),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Positioned(
-                  top: 2,
-                  left: 2,
-                  child: Image.asset(
-                    'assets/icon/seru.png',
-                    width: 24,
-                    height: 24,
+                Padding(
+                  padding: EdgeInsets.only(
+                    right: 30,
+                    left: 0,
+                  ),
+                  child: Text(
+                    'Rp. 1.000.000,-',
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                      color: Color(0xFFED4C5C),
+                      fontSize: 12,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w600,
+                      height: -12,
+                    ),
                   ),
                 ),
               ],
             ),
-          ),
-          const SizedBox(height: 1),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      left: 35,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Report Date',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 12,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w600,
-                            height: -5,
-                          ),
-                        ),
-                        Text(
-                          reportData.reportDate,
-                          style: const TextStyle(
-                            color: Color(0xFF9F9F9F),
-                            fontSize: 10,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w500,
-                            height: -2,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                width: 8,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(
-                      right: 30,
-                      left: 0,
-                    ),
-                    child: Text(
-                      'Eggs Total',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 10,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w600,
-                        height: 2,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      right: 2,
-                      left: 0,
-                      top: 20,
-                    ),
-                    child: Text(
-                      reportData.eggsTotal.toString(),
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: Color(0xFF50BE92),
-                        fontSize: 12,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w500,
-                        height: -1,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(
-                      top: 4,
-                      left: 35,
-                    ),
-                    child: Text(
-                      'Harvest Date',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 12,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w600,
-                        height: -3,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      top: 2,
-                      left: 35,
-                    ),
-                    child: Text(
-                      reportData.harvestDate,
-                      style: const TextStyle(
-                        color: Color(0xFF9F9F9F),
-                        fontSize: 10,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w500,
-                        height: -1,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      ],
+    ),
+  );
+}
+
+String getFormattedDate(String fullDate) {
+  List<String> dateParts = fullDate.split(',');
+  if (dateParts.length > 1) {
+    return dateParts[1].trim();
   }
+  return fullDate;
 }
 
 class NavigationButtomBar extends StatelessWidget {
@@ -404,7 +483,7 @@ Widget buildIconButton(String assetPath, VoidCallback onPressed) {
       width: 70,
       height: 65,
     ),
-    onPressed: onPressed, // This should call onPressed
+    onPressed: onPressed,
   );
 }
 

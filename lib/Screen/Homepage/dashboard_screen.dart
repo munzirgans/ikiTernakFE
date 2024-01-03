@@ -117,8 +117,9 @@ class _DashboardState extends State<Dashboard> {
             child: buildWater(context),
           ),
           Positioned(
-            top: 470,
+            top: 500,
             left: 25,
+            right: 45,
             child: buildGrafik(context),
           ),
           Positioned(
@@ -554,51 +555,91 @@ class _DashboardState extends State<Dashboard> {
     return Column(
       children: [
         SizedBox(
-          width: 339,
+          width: 390,
           height: 192,
           child: LineChart(
             LineChartData(
-              gridData: const FlGridData(show: false),
-              titlesData: const FlTitlesData(show: false),
-              borderData: FlBorderData(
+              gridData: FlGridData(show: false),
+              titlesData: FlTitlesData(
                 show: true,
-                border: const Border(
-                  bottom: BorderSide(
-                    color: Color(0xFFD8DCDA),
-                    width: 1,
-                  ),
-                  left: BorderSide(
-                    color: Color(0xFFD8DCDA),
-                    width: 1,
-                  ),
-                  right: BorderSide(
-                    color: Color(0xFFD8DCDA),
-                    width: 1,
-                  ),
-                  top: BorderSide(
-                    color: Color(0xFFD8DCDA),
-                    width: 1,
-                  ),
+                bottomTitles: SideTitles(
+                  showTitles: true,
+                  reservedSize: 22,
+                  getTextStyles: (value, interval) {
+                    return const TextStyle(
+                      color: Color(0xFF575757),
+                      fontWeight: FontWeight.w400,
+                      fontSize: 8,
+                    );
+                  },
+                  getTitles: (value) {
+                    switch (value.toInt()) {
+                      case 1:
+                        return 'Day 1';
+                      case 2:
+                        return 'Day 2';
+                      case 3:
+                        return 'Day 3';
+                      case 4:
+                        return 'Day 4';
+                      case 5:
+                        return 'Day 5';
+                      case 6:
+                        return 'Day 6';
+                      default:
+                        return '';
+                    }
+                  },
+                ),
+                leftTitles: SideTitles(
+                  showTitles: true,
+                  reservedSize: 22,
+                  getTextStyles: (value, interval) {
+                    return const TextStyle(
+                      color: Color(0xFF575757),
+                      fontWeight: FontWeight.w400,
+                      fontSize: 8,
+                    );
+                  },
+                  getTitles: (value) {
+                    switch (value.toInt()) {
+                      case 0:
+                        return '0';
+                      case 25:
+                        return '25';
+                      case 50:
+                        return '50';
+                      case 75:
+                        return '75';
+                      case 100:
+                        return '100';
+                      default:
+                        return '';
+                    }
+                  },
                 ),
               ),
+              borderData: FlBorderData(
+                show: true,
+                border: Border.all(color: const Color(0xFF37434d), width: 1),
+              ),
               minX: 0,
-              maxX: 6,
+              maxX: 7,
               minY: 0,
               maxY: 100,
               lineBarsData: [
                 LineChartBarData(
                   spots: [
-                    const FlSpot(1, 20),
-                    const FlSpot(2, 40),
-                    const FlSpot(3, 60),
-                    const FlSpot(4, 80),
-                    const FlSpot(5, 40),
-                    const FlSpot(6, 60),
+                    FlSpot(1, 40),
+                    FlSpot(2, 60),
+                    FlSpot(3, 25),
+                    FlSpot(4, 75),
+                    FlSpot(5, 30),
+                    FlSpot(6, 90),
                   ],
                   isCurved: true,
-                  color: const Color(0xFF50BE92),
-                  barWidth: 2,
-                  isStrokeCapRound: true,
+                  colors: [const Color(0xFF50BE92)],
+                  dotData: FlDotData(show: false),
                   belowBarData: BarAreaData(show: false),
                 ),
               ],
