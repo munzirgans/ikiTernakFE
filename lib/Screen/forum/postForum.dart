@@ -1,5 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:ikiternak_apps/Screen/Layout/alert_dialog.dart';
 import 'package:ikiternak_apps/Screen/forum/forumTernak.dart';
+import 'package:ikiternak_apps/environtment.dart';
+import 'package:ikiternak_apps/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(const PostForumApp());
@@ -42,6 +49,25 @@ class _PostForumState extends State<PostForum> {
     setState(() {
       _isInputEmpty = _controller.text.isEmpty;
     });
+  }
+
+  void submitForum(BuildContext context) async {
+    String? token = prefs.getString('jwtToken');
+    const String path = '/forumternak';
+    String? apiURL = Env.apiURL! + path;
+    final Map<String, dynamic> data = {'description': _controller.text};
+    try {
+      http
+          .post(Uri.parse(apiURL),
+              headers: {
+                'Content-type': 'application/json',
+                'Authorization': 'Bearer $token'
+              },
+              body: jsonEncode(data))
+          .then((response) {});
+    } catch (error) {
+      AlertDialogWidget.showAlertDialog(context, "Error", error.toString());
+    }
   }
 
   @override
@@ -103,14 +129,11 @@ class _PostForumState extends State<PostForum> {
                   top: 46,
                   child: GestureDetector(
                     onTap: () {
-                      // Tambahkan logika untuk menanggapi tombol "Post" di sini
+                      submitForum(context);
                       Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const ForumTernak(),
-                        ),
-                      );
-                      print('Post button tapped!');
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ForumTernak()));
                     },
                     child: Container(
                       width: 63,

@@ -1,8 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:ikiternak_apps/Screen/Homepage/dashboard_screen.dart';
 import 'package:ikiternak_apps/Screen/Profile/profile.dart';
 import 'package:ikiternak_apps/Screen/TernakDiary/diaryTernak.dart';
-import 'package:ikiternak_apps/Screen/forum/postForum.dart';
+import 'package:ikiternak_apps/environtment.dart';
+import 'package:ikiternak_apps/main.dart';
+import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(const ForumTernak());
@@ -10,6 +15,22 @@ void main() {
 
 class ForumTernak extends StatelessWidget {
   const ForumTernak({Key? key});
+  Future<List<Map<String, dynamic>>> loadPage() async {
+    await Future.delayed(const Duration(milliseconds: 800));
+    var token = prefs.getString('jwtToken');
+    const String path = '/forumternak';
+    String? apiURL = Env.apiURL! + path;
+    var response = await http.get(
+      Uri.parse(apiURL),
+      headers: {
+        'Content-type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+    );
+    List<Map<String, dynamic>> result =
+        List<Map<String, dynamic>>.from(jsonDecode(response.body));
+    return result;
+  }
 
   @override
   Widget build(BuildContext context) {

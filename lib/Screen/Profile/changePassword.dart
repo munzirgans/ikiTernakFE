@@ -1,5 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:ikiternak_apps/Screen/Layout/alert_dialog.dart';
 import 'package:ikiternak_apps/Screen/Profile/profile.dart';
+import 'package:ikiternak_apps/environtment.dart';
+import 'package:ikiternak_apps/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(const UbahPassword());
@@ -42,6 +49,40 @@ class _ChangePasswordState extends State<ChangePassword> {
   bool isConfirmPasswordVisible = false;
 
   bool isPasswordMismatch = false;
+
+  void submitChangePassword() {
+    var token = prefs.getString('jwtToken');
+    const String path = '/users/changepassword';
+    String? apiURL = Env.apiURL! + path;
+    final Map<String, dynamic> data = {
+      'current': currentPasswordController.text,
+      'new': newPasswordController.text,
+    };
+    try {
+      http
+          .post(Uri.parse(apiURL),
+              headers: {
+                "Content-type": "application/json",
+                'Authorization': 'Bearer $token'
+              },
+              body: jsonEncode(data))
+          .then((response) {
+        var jsonResponse = jsonDecode(response.body);
+        if (response.statusCode == 200) {
+          AlertDialogWidget.showAlertDialog(
+              context, "Success", "Successfully change password!");
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const Userprofile()));
+        } else {
+          AlertDialogWidget.showAlertDialog(
+              context, "Error", jsonResponse['message']);
+        }
+      });
+    } catch (error) {
+      AlertDialogWidget.showAlertDialog(
+          context, "Error", "Internal Server Error!");
+    }
+  }
 
   @override
   void dispose() {
@@ -169,13 +210,12 @@ class _ChangePasswordState extends State<ChangePassword> {
 
                       if (newPassword == confirmPassword) {
                         // Passwords match, proceed with the submission
-                        print('Submit button tapped');
+                        submitChangePassword();
                         setState(() {
                           isPasswordMismatch = false;
                         });
 
                         // Show success dialog
-                        _showSuccessDialog(context);
                       } else {
                         // Passwords do not match, show error message
                         setState(() {
