@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ikiternak_apps/Screen/Homepage/dashboard_screen.dart';
 import 'package:ikiternak_apps/Screen/Profile/UbahBahasa.dart';
 import 'package:ikiternak_apps/Screen/Profile/changePassword.dart';
+import 'package:ikiternak_apps/Screen/Profile/editProfile.dart';
 import 'package:ikiternak_apps/Screen/Profile/faq.dart';
 import 'package:ikiternak_apps/Screen/Profile/notification.dart';
 import 'package:ikiternak_apps/Screen/TernakDiary/diaryTernak.dart';
@@ -139,8 +140,12 @@ class Logout extends StatelessWidget {
                           top: 65,
                           child: GestureDetector(
                             onTap: () {
-                              // Fungsi yang akan dipanggil saat teks "Edit Profile" ditekan
-                              print('Edit Profile Tapped');
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const EditProfilePage()),
+                              );
                             },
                             child: Container(
                               width: 290,
