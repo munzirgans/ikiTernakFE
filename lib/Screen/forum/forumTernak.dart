@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:ikiternak_apps/Screen/Homepage/dashboard_screen.dart';
 import 'package:ikiternak_apps/Screen/Profile/profile.dart';
 import 'package:ikiternak_apps/Screen/TernakDiary/diaryTernak.dart';
+import 'package:ikiternak_apps/Screen/forum/postForum.dart';
 import 'package:ikiternak_apps/environtment.dart';
 import 'package:ikiternak_apps/main.dart';
 import 'package:http/http.dart' as http;
