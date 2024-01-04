@@ -1,13 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:ikiternak_apps/Screen/Homepage/dashboard_screen.dart';
 import 'package:ikiternak_apps/Screen/Profile/profile.dart';
 import 'package:ikiternak_apps/Screen/TernakDiary/diaryTernak.dart';
-import 'package:ikiternak_apps/environtment.dart';
-import 'package:ikiternak_apps/main.dart';
-import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
+import 'package:ikiternak_apps/Screen/forum/postForum.dart';
 
 void main() {
   runApp(const ForumTernak());
@@ -15,22 +10,6 @@ void main() {
 
 class ForumTernak extends StatelessWidget {
   const ForumTernak({Key? key});
-  Future<List<Map<String, dynamic>>> loadPage() async {
-    await Future.delayed(const Duration(milliseconds: 800));
-    var token = prefs.getString('jwtToken');
-    const String path = '/forumternak';
-    String? apiURL = Env.apiURL! + path;
-    var response = await http.get(
-      Uri.parse(apiURL),
-      headers: {
-        'Content-type': 'application/json',
-        'Authorization': 'Bearer $token'
-      },
-    );
-    List<Map<String, dynamic>> result =
-        List<Map<String, dynamic>>.from(jsonDecode(response.body));
-    return result;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,20 +81,6 @@ class ForumTernak extends StatelessWidget {
           ],
         ),
         bottomNavigationBar: NavigationBottomBar(),
-        floatingActionButton: Positioned(
-          bottom: 20,
-          right: 16,
-          child: IconButton(
-            icon: Image.asset(
-              'assets/icon/add.png',
-              width: 50,
-              height: 50,
-            ),
-            onPressed: () {
-              submit(context);
-            },
-          ),
-        ),
       ),
     );
   }
@@ -252,6 +217,14 @@ class _ForumContentState extends State<ForumContent> {
                 indent: 12,
                 endIndent: 12,
                 height: 20,
+              ),
+              Positioned(
+                bottom: 20,
+                right: 16,
+                child: buildIconButton('assets/icon/add.png', () {
+                  submit(
+                      context); // Call the submitDompett function with context
+                }),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -413,17 +386,13 @@ class NavigationBottomBar extends StatelessWidget {
 }
 
 Widget buildIconButton(String assetPath, VoidCallback onPressed) {
-  return Positioned(
-    bottom: 20,
-    right: 16,
-    child: IconButton(
-      icon: Image.asset(
-        assetPath,
-        width: 70,
-        height: 65,
-      ),
-      onPressed: onPressed,
+  return IconButton(
+    icon: Image.asset(
+      assetPath,
+      width: 70,
+      height: 65,
     ),
+    onPressed: onPressed,
   );
 }
 
@@ -431,7 +400,6 @@ void submit(BuildContext context) {
   Navigator.push(
     context,
     MaterialPageRoute(
-      builder: (context) => const PostForumApp(),
-    ),
+        builder: (context) => const PostForum()), // Remove const here
   );
 }
