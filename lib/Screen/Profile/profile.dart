@@ -178,7 +178,8 @@ class Logout extends StatelessWidget {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  const EditProfilePage()),
+                                                  EditProfilePage(
+                                                      name: nameText)),
                                         );
                                       },
                                       child: Container(

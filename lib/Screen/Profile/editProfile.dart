@@ -8,12 +8,13 @@ import 'package:ikiternak_apps/main.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
-void main() {
-  runApp(const EditProfilePage());
-}
+// void main() {
+//   runApp(const EditProfilePage());
+// }
 
 class EditProfilePage extends StatelessWidget {
-  const EditProfilePage({Key? key});
+  final String name;
+  const EditProfilePage({Key? key, required this.name});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class EditProfilePage extends StatelessWidget {
       home: Scaffold(
         body: ListView(
           children: [
-            EditProfile(),
+            EditProfile(name: name),
           ],
         ),
       ),
@@ -33,11 +34,15 @@ class EditProfilePage extends StatelessWidget {
 }
 
 class EditProfile extends StatefulWidget {
+  String name;
+  EditProfile({required this.name});
   @override
-  _EditProfileState createState() => _EditProfileState();
+  _EditProfileState createState() => _EditProfileState(name: name);
 }
 
 class _EditProfileState extends State<EditProfile> {
+  String name;
+  _EditProfileState({required this.name});
   String selectedGender = '';
   List<String> genderOptions = ['Male', 'Female'];
   TextEditingController nameController = TextEditingController();
@@ -136,12 +141,12 @@ class _EditProfileState extends State<EditProfile> {
                   ),
                 ),
               ),
-              const Positioned(
+              Positioned(
                 left: 130,
                 top: 225,
                 child: Text(
-                  'Joko Sudirmant',
-                  style: TextStyle(
+                  name,
+                  style: const TextStyle(
                     color: Colors.black,
                     fontSize: 16,
                     fontFamily: 'Poppins',

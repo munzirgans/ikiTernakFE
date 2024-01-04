@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ikiternak_apps/Screen/DompetTernak/dompertTernak.dart';
+import 'package:ikiternak_apps/environtment.dart';
+import 'package:ikiternak_apps/main.dart';
 import 'package:intl/intl.dart';
 
 void main() {
@@ -21,6 +23,20 @@ class _submitDompetState extends State<submitDompet> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _titleController = TextEditingController();
 
+  void dompetSubmit() {
+    String? token = prefs.getString('jwtToken');
+    const String path = '/diaryternak/diary';
+    String? apiURL = Env.apiURL! + path;
+    final Map<String, dynamic> data = {
+      'title': _titleController.text,
+      'date': selectedDate,
+      'amount': _amountController.text,
+      'category': _categoryController.text,
+      'description': _descriptionController.text,
+    };
+    print(data);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -39,23 +55,27 @@ class _submitDompetState extends State<submitDompet> {
               titleController: _titleController,
               onCancelPressed: () {
                 // Navigate to DompetTernak screen when Cancel button is pressed
+                print("test");
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => DompetTernak()),
                 );
               },
               onSubmitPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => DompetTernak()),
-                );
+                // print("test");
+                // print("TEST");
+                // submitDompet();
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => DompetTernak()),
+                // );
                 // Tambahkan aksi untuk tombol Submit di sini
-                print('Submit Pressed');
-                print('Date: ${selectedDate.toString()}');
-                print('Amount: ${_amountController.text}');
-                print('Category: ${_categoryController.text}');
-                print('Title: ${_titleController}');
-                print('Description: ${_descriptionController.text}');
+                // print('Submit Pressed');
+                // print('Date: ${selectedDate.toString()}');
+                // print('Amount: ${_amountController.text}');
+                // print('Category: ${_categoryController.text}');
+                // print('Title: ${_titleController}');
+                // print('Description: ${_descriptionController.text}');
               },
             ),
           ],
@@ -397,7 +417,12 @@ class SubmitDompet extends StatelessWidget {
                 top: 760,
                 child: Column(
                   children: [
-                    SubmitButton(onPressed: onSubmitPressed),
+                    SubmitButton(
+                        amountController: amountController,
+                        categoryController: categoryController,
+                        descriptionController: descriptionController,
+                        titleController: titleController,
+                        selectedDate: selectedDate),
                     const SizedBox(height: 16),
                   ],
                 ),
@@ -423,18 +448,32 @@ class SubmitDompet extends StatelessWidget {
 }
 
 class SubmitButton extends StatelessWidget {
-  final VoidCallback? onPressed;
+  DateTime? selectedDate;
 
-  SubmitButton({required this.onPressed});
+  final TextEditingController amountController,
+      categoryController,
+      descriptionController,
+      titleController;
+
+  SubmitButton(
+      {required this.amountController,
+      required this.categoryController,
+      required this.descriptionController,
+      required this.titleController,
+      required this.selectedDate});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => DompetTernak()),
-        );
+        String? token = prefs.getString('jwtToken');
+        const String path = '/diaryternak/diary';
+        String? apiURL = Env.apiURL! + path;
+        print(selectedDate);
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => DompetTernak()),
+        // );
       },
       child: Container(
         width: 323,
