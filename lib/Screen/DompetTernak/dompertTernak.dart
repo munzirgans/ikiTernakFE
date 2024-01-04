@@ -353,7 +353,7 @@ Widget buildReportCard() {
                       fontSize: 10,
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w500,
-                      height: 6,
+                      height: 5,
                     ),
                   ),
                 ],
