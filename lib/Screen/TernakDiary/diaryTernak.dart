@@ -1,12 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:ikiternak_apps/Screen/DompetTernak/dompertTernak.dart';
 import 'package:ikiternak_apps/Screen/Homepage/dashboard_screen.dart';
 import 'package:ikiternak_apps/Screen/Profile/profile.dart';
 import 'package:ikiternak_apps/Screen/Submit/submitDiary.dart';
 import 'package:ikiternak_apps/Screen/forum/forumTernak.dart';
+import 'package:ikiternak_apps/environtment.dart';
+import 'package:ikiternak_apps/main.dart';
 import 'button.dart';
 import 'constant.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(DiaryTernak());
@@ -32,24 +37,41 @@ class DiaryTernak extends StatefulWidget {
 class _DiaryTernakState extends State<DiaryTernak> {
   bool isDiaryTernakActive = true;
   bool isDompetTernakActive = false;
+  Future<Map<String, dynamic>> loadPage() async {
+    await Future.delayed(const Duration(seconds: 1));
+    var token = prefs.getString('jwtToken');
+    const String path = '/diaryternak/diary';
+    String? apiURL = Env.apiURL! + path;
+    var response = await http.get(
+      Uri.parse(apiURL),
+      headers: {
+        'Content-type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+    );
+    Map<String, dynamic> result =
+        Map<String, dynamic>.from(jsonDecode(response.body));
+    return result;
+    // List<ReportData> result = List<ReportData>.from(jsonDecode(response.body));
+  }
 
-  List<ReportData> reportDataList = [
-    ReportData(
-      reportDate: 'Monday, 22 December 2022',
-      harvestDate: 'Saturday, 19 December 2022',
-      eggsTotal: 25,
-    ),
-    ReportData(
-      reportDate: 'Tuesday, 23 December 2022',
-      harvestDate: 'Sunday, 20 December 2022',
-      eggsTotal: 30,
-    ),
-    ReportData(
-      reportDate: 'Wednesday, 24 December 2022',
-      harvestDate: 'Monday, 21 December 2022',
-      eggsTotal: 35,
-    ),
-  ];
+  // List<ReportData> reportDataList = [
+  //   ReportData(
+  //     reportDate: 'Monday, 22 December 2022',
+  //     harvestDate: 'Saturday, 19 December 2022',
+  //     eggsTotal: 25,
+  //   ),
+  //   ReportData(
+  //     reportDate: 'Tuesday, 23 December 2022',
+  //     harvestDate: 'Sunday, 20 December 2022',
+  //     eggsTotal: 30,
+  //   ),
+  //   ReportData(
+  //     reportDate: 'Wednesday, 24 December 2022',
+  //     harvestDate: 'Monday, 21 December 2022',
+  //     eggsTotal: 35,
+  //   ),
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -68,74 +90,173 @@ class _DiaryTernakState extends State<DiaryTernak> {
             ),
           ),
         ),
-        body: Stack(
-          children: [
-            Container(
-              color: const Color(0xFFF8F8F8),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 50.0,
-                  vertical: 12.0,
-                ),
-                child: Column(
+        body: FutureBuilder<Map<String, dynamic>>(
+            future: loadPage(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else if (snapshot.hasData) {
+                Map<String, dynamic> ternakData = snapshot.data!;
+                List<dynamic> listTernakDatas = ternakData['data'];
+                List<Map<String, dynamic>> listTernakData =
+                    List<Map<String, dynamic>>.from(listTernakDatas);
+                List<ReportData> reportDataList = [];
+                listTernakData.forEach((element) {
+                  String reportDate = element['createdAt'];
+                  String harvestDate = element['harvest_date'];
+                  int eggsTotal = element['quantity'];
+                  ReportData report = ReportData(
+                      reportDate: reportDate,
+                      harvestDate: harvestDate,
+                      eggsTotal: eggsTotal);
+                  reportDataList.add(report);
+                });
+                return Stack(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        buildDiaryTernakButton(
-                            'Diary Ternak', isDiaryTernakActive),
-                        buildDiaryTernakButton(
-                            'Dompet Ternak', isDompetTernakActive),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    buildGrafik(context),
-                    const SizedBox(height: 40),
-                    const Text(
-                      'Recently',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 12,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
+                    Container(
+                      color: const Color(0xFFF8F8F8),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 50.0,
+                          vertical: 12.0,
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                buildDiaryTernakButton(
+                                    'Diary Ternak', isDiaryTernakActive),
+                                buildDiaryTernakButton(
+                                    'Dompet Ternak', isDompetTernakActive),
+                              ],
+                            ),
+                            const SizedBox(height: 20),
+                            buildGrafik(context),
+                            const SizedBox(height: 40),
+                            const Text(
+                              'Recently',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 12,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            Expanded(
+                              child: ListView.builder(
+                                itemCount: reportDataList.length,
+                                itemBuilder: (context, index) {
+                                  if (index < reportDataList.length) {
+                                    return Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 20),
+                                      child: buildReportCard(
+                                          reportDataList[index]),
+                                    );
+                                  } else {
+                                    ReportData placeholderData = ReportData(
+                                      reportDate: 'Placeholder Date',
+                                      harvestDate: 'Placeholder Harvest Date',
+                                      eggsTotal: 0,
+                                    );
+                                    return Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 20),
+                                      child: buildReportCard(placeholderData),
+                                    );
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: reportDataList.length + 5,
-                        itemBuilder: (context, index) {
-                          if (index < reportDataList.length) {
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 20),
-                              child: buildReportCard(reportDataList[index]),
-                            );
-                          } else {
-                            ReportData placeholderData = ReportData(
-                              reportDate: 'Placeholder Date',
-                              harvestDate: 'Placeholder Harvest Date',
-                              eggsTotal: 0,
-                            );
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 20),
-                              child: buildReportCard(placeholderData),
-                            );
-                          }
-                        },
-                      ),
+                    Positioned(
+                      bottom: 20,
+                      right: 16,
+                      child: buildIconButton('assets/icon/add.png', () {
+                        submit(
+                            context); // Call the submitDompett function with context
+                      }),
                     ),
                   ],
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: 20,
-              right: 16,
-              child: buildIconButton('assets/icon/add.png', () {
-                submit(context); // Call the submitDompett function with context
-              }),
-            ),
-          ],
-        ),
+                );
+              } else {
+                return const Center(child: Text('No data available'));
+              }
+            }),
+        // body: Stack(
+        //   children: [
+        //     Container(
+        //       color: const Color(0xFFF8F8F8),
+        //       child: Padding(
+        //         padding: const EdgeInsets.symmetric(
+        //           horizontal: 50.0,
+        //           vertical: 12.0,
+        //         ),
+        //         child: Column(
+        //           children: [
+        //             Row(
+        //               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        //               children: [
+        //                 buildDiaryTernakButton(
+        //                     'Diary Ternak', isDiaryTernakActive),
+        //                 buildDiaryTernakButton(
+        //                     'Dompet Ternak', isDompetTernakActive),
+        //               ],
+        //             ),
+        //             const SizedBox(height: 20),
+        //             buildGrafik(context),
+        //             const SizedBox(height: 40),
+        //             const Text(
+        //               'Recently',
+        //               style: TextStyle(
+        //                 color: Colors.black,
+        //                 fontSize: 12,
+        //                 fontFamily: 'Poppins',
+        //                 fontWeight: FontWeight.w400,
+        //               ),
+        //             ),
+        //             Expanded(
+        //               child: ListView.builder(
+        //                 itemCount: reportDataList.length + 5,
+        //                 itemBuilder: (context, index) {
+        //                   if (index < reportDataList.length) {
+        //                     return Padding(
+        //                       padding: const EdgeInsets.only(bottom: 20),
+        //                       child: buildReportCard(reportDataList[index]),
+        //                     );
+        //                   } else {
+        //                     ReportData placeholderData = ReportData(
+        //                       reportDate: 'Placeholder Date',
+        //                       harvestDate: 'Placeholder Harvest Date',
+        //                       eggsTotal: 0,
+        //                     );
+        //                     return Padding(
+        //                       padding: const EdgeInsets.only(bottom: 20),
+        //                       child: buildReportCard(placeholderData),
+        //                     );
+        //                   }
+        //                 },
+        //               ),
+        //             ),
+        //           ],
+        //         ),
+        //       ),
+        //     ),
+        //     Positioned(
+        //       bottom: 20,
+        //       right: 16,
+        //       child: buildIconButton('assets/icon/add.png', () {
+        //         submit(context); // Call the submitDompett function with context
+        //       }),
+        //     ),
+        //   ],
+        // ),
         bottomNavigationBar: NavigationButtomBar(),
       ),
     );
